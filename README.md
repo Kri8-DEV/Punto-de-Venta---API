@@ -12,8 +12,11 @@ Install all the next dependencies for the project:
 - morgan
 - dotenv
 - body-parser
+- bcryptjs
+- jsonwebtoken
+- sequelize
 
-```npm i nodemon express mysql2 cors morgan dotenv body-parser --save```
+```npm i nodemon express mysql2 cors morgan dotenv body-parser bcryptjs jsonwebtoken sequelize --save```
 
 Install Swagger dependencies:
 - swagger-jsdoc

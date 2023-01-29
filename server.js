@@ -5,6 +5,9 @@ const cors = require('cors');
 
 const bodyParser = require('body-parser');
 
+const db = require("./app/models");
+const db_seed = require("./app/config/db.seed.js");
+
 // Config
 const app = express();
 const port = process.env.PORT || 3000;
@@ -12,6 +15,11 @@ const corsOptions = {
   origin: process.env.CORS_ORIGIN
 };
 app.use(cors(corsOptions));
+
+db.sequelize.sync({force: true}).then(() => {
+  console.log('Drop and Resync Db');
+  db_seed.initial(db);
+});
 
 // Swagger
 const swaggerUi = require('swagger-ui-express');
@@ -30,8 +38,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-
 // Routes
+
+require('./app/routes/auth.routes')(app);
+
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to KRI Eight - API' });
 });
