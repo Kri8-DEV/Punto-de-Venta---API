@@ -10,3 +10,86 @@ components:
       type: apiKey
       name: authorization
       in: header
+definitions:
+  createdAt:
+    type: string
+    example: 2023-01-28T03:37:33.114Z
+    description: Creation date
+  credentials:
+    type: object
+    properties:
+      username:
+        type: string
+        example: Rodrigo Sebastián
+        description: User name
+      email:
+        type: string
+        example: rodrigo@krieight.com
+        description: User email
+      password:
+        type: string
+        example: 123456
+        description: User password
+  error:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Error message
+        description: Error message
+  signIn:
+    type: object
+    properties:
+      id:
+        type: uuid
+        example: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+        description: Internal user ID
+      username:
+        type: string
+        example: Rodrigo Sebastián
+        description: User name
+      email:
+        type: string
+        example: rodrigo@nutrimax.mx
+        description: User email
+      role:
+        type: string
+        example: admin
+        description: User role name
+      accessToken:
+        type: string
+        description: JWT token
+  signUp:
+    type: object
+    properties:
+      message:
+        type: string
+        example: User was registered successfully
+        description: User was registered successfully
+      data:
+        type: object
+        properties:
+          id:
+            type: uuid
+            example: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+            description: Internal user ID
+          username:
+            type: string
+            example: Rodrigo Sebastián
+            description: User name
+          email:
+            type: string
+            example: rodrigo@krieight.com
+            description: User email
+          roleId:
+            type: integer
+            example: 1
+            description: User role ID
+          updatedAt:
+            $ref: '#/definitions/updatedAt'
+          createdAt:
+            $ref: '#/definitions/createdAt'
+  updatedAt:
+    type: string
+    example: 2023-01-28T03:37:33.114Z
+    description: Last update date
