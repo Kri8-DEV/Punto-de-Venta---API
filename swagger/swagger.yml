@@ -1,0 +1,12 @@
+openapi: '3.0.0'
+info:
+  title: KRI Eight - API
+  version: '1.0.0'
+  description: KRI Eight - API
+components:
+  securitySchemes:
+    Bearer:
+      description: JWT key necessary to use API calls
+      type: apiKey
+      name: authorization
+      in: header

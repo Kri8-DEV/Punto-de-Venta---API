@@ -13,9 +13,22 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
+// Swagger
+const swaggerUi = require('swagger-ui-express');
+var mergeYaml = require('merge-yaml');
+
+const fs = require('fs');
+let files = []
+if (fs.existsSync('./spec/requests')) {
+  files = fs.readdirSync('./spec/requests')
+}
+const swaggerDocument = mergeYaml(['./swagger/swagger.yml'].concat(files.map(file => './spec/requests/' + file)))
+
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use('/api/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
 // Routes
