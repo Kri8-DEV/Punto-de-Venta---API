@@ -10,18 +10,28 @@ const Role = db.role;
 
 // Save User to database
 module.exports.signup = (req, res) => {
-  role = db.ROLES[req.body.role];
-  User.create({
-    username: req.body.username,
-    email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8),
-    roleId: role ? role : db.ROLES["user"]
-  }).then(user => {
-    delete user.dataValues.password;
-    res.send({ message: "User was registered successfully", user: user });
-  }).catch(err => {
-    res.status(500).send({ message: err.message });
-  });
+  try {
+    role = db.ROLES[req.body.role];
+    let encryptedPassword = "";
+
+    if(req.body.password != null && req.body.password != "")
+      encryptedPassword = bcrypt.hashSync(req.body.password, 8);
+
+    User.create({
+      username: req.body.username,
+      email: req.body.email,
+      password: encryptedPassword,
+      roleId: role ? role : db.ROLES["user"]
+    }).then(user => {
+      delete user.dataValues.password;
+      res.send({ message: "User was registered successfully", user: user });
+    }).catch(err => {
+      res.status(422).send({ message: err.message });
+    });
+
+  } catch (err) {
+    res.status(500).send({ message: err });
+  };
 };
 
 // Sign in

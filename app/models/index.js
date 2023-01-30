@@ -24,6 +24,26 @@ db.sequelize = sequelize;
 
 db.user = require('./user.model')(sequelize, Sequelize);
 db.role = require('./role.model')(sequelize, Sequelize);
+db.address = require('./address.model')(sequelize, Sequelize);
+db.person = require('./person.model')(sequelize, Sequelize);
+
+db.address.hasMany(db.person);
+db.person.belongsTo(db.address,{
+  foreignKey: {
+    name: 'addressId',
+    allowNull: false
+  },
+  onDelete: 'CASCADE'
+}); 
+
+db.person.hasOne(db.user);
+db.user.belongsTo(db.person,{
+  foreignKey: {
+    name: 'personId',
+    allowNull: false
+  },
+  onDelete: 'CASCADE'
+});
 
 db.role.hasMany(db.user);
 db.user.belongsTo(db.role,{

@@ -12,12 +12,10 @@ module.exports = function(app) {
   });
 
   app.post('/api/auth/signup',
-  [
-    authToken,
-    authRole("admin"),
-    verifySignUp.checkDuplicateUsernameOrEmail,
-    verifySignUp.checkRolesExisted
-  ],
+  // [
+    // authToken,
+    // authRole("admin")
+  // ],
   controller.signup);
 
   app.post('/api/auth/signin', controller.signin);
