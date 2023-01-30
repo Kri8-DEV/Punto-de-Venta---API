@@ -22,20 +22,13 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
+// Models
 db.user = require('./user.model')(sequelize, Sequelize);
 db.role = require('./role.model')(sequelize, Sequelize);
 db.address = require('./address.model')(sequelize, Sequelize);
 db.person = require('./person.model')(sequelize, Sequelize);
 
-db.address.hasMany(db.person);
-db.person.belongsTo(db.address,{
-  foreignKey: {
-    name: 'addressId',
-    allowNull: false
-  },
-  onDelete: 'CASCADE'
-}); 
-
+// Relationships
 db.person.hasOne(db.user);
 db.user.belongsTo(db.person,{
   foreignKey: {
@@ -53,5 +46,37 @@ db.user.belongsTo(db.role,{
   },
   onDelete: 'CASCADE'
 });
+
+db.address.hasMany(db.person);
+db.person.belongsTo(db.address,{
+  foreignKey: {
+    name: 'addressId',
+    allowNull: false
+  },
+  onDelete: 'CASCADE'
+});
+
+// Scopes
+db.user.addScope('defaultScope', {
+  attributes: {
+    exclude: ["password", "personId", "roleId"]
+  },
+  include: [
+    { model: db.role, as: 'role' },
+    { model: db.person, as: 'person', include: [
+      { model: db.address, as: 'address' }
+    ] }
+  ]
+}, { override: true });
+
+db.user.addScope('withPassword', {
+  attributes: {
+    include: ["password"]
+  }
+});
+
+db.person.addScope('defaultScope', {
+  attributes: { exclude: ['addressId'] }
+}, { override: true });
 
 module.exports = db;
