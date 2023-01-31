@@ -139,3 +139,7 @@ definitions:
         $ref: '#/definitions/role'
       person:
         $ref: '#/definitions/person'
+  users:
+    type: array
+    items:
+      $ref: '#/definitions/user'

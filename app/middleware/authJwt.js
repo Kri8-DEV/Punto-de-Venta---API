@@ -41,7 +41,7 @@ let authRole = (role) => {
         });
       }
 
-      if(db.ROLES[role] === user.roleId) {
+      if(db.ROLES[role] === user.role.id) {
         next();
         return;
       }

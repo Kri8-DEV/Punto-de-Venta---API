@@ -40,6 +40,7 @@ app.use('/api/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Routes
 require('./app/routes/auth.routes')(app);
+require('./app/routes/user.routes')(app);
 
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to KRI Eight - API' });

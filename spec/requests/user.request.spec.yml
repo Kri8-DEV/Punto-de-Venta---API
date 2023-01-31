@@ -1,0 +1,62 @@
+paths:
+  /api/users:
+    get:
+      tags:
+        - User
+      description: Get all users
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Users retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/users'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+  /api/user/create:
+    post:
+      tags:
+        - User
+      description: Create a new user
+      security:
+      - Bearer: []
+      parameters:
+        - name: credentials
+          in: body
+          description: User credentials
+          required: true
+          schema:
+            $ref: '#/definitions/credentials'
+      responses:
+        '200':
+          description: User registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/signUp'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+
+

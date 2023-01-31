@@ -1,6 +1,4 @@
 const controller = require("../controllers/auth.controller");
-const verifySignUp = require("../middleware/verifySignUp");
-const { authToken, authRole } = require("../middleware/authJwt");
 
 module.exports = function(app) {
   app.use(function(req, res, next) {
@@ -10,13 +8,6 @@ module.exports = function(app) {
     );
     next();
   });
-
-  app.post('/api/auth/signup',
-  // [
-    // authToken,
-    // authRole("admin")
-  // ],
-  controller.signup);
 
   app.post('/api/auth/signin', controller.signin);
 };

@@ -82,7 +82,11 @@ db.user.addScope('withPassword', {
 });
 
 db.person.addScope('defaultScope', {
-  attributes: { exclude: ['addressId'] }
+  attributes: { exclude: ['addressId', 'createdAt', 'updatedAt'] },
+}, { override: true });
+
+db.address.addScope('defaultScope', {
+  attributes: { exclude: ['createdAt', 'updatedAt'] },
 }, { override: true });
 
 module.exports = db;
