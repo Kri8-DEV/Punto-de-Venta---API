@@ -10,7 +10,7 @@ module.exports = function(app) {
     next();
   });
 
-  // app.use(authToken, authRole("admin"))
+  app.use(authToken, authRole("admin"))
 
   // Retrieve all Users
   app.get('/api/users', controller.findAll);
