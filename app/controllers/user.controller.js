@@ -168,26 +168,20 @@ module.exports.update = async (req, res) => {
 
     const result = await sequelize.transaction(async (t) => {
 
-        if (req.body.address == null)
-          throw { message: "Address is required", status: 400 };
-
-        if (req.body.person == null)
-          throw { message: "Person is required", status: 400 };
-
-        const role = db.ROLES[req.body.role]
+      const role = db.ROLES[req.body.role]
         if (role == null)
           throw { message: "Role no found", status: 400 };
 
         const address = await user.person.address.update({
-          street: req.body.address.street,
-          city: req.body.address.city,
-          state: req.body.address.state,
-          zip: req.body.address.zip
+          street: req.body.address ? req.body.address.street : user.person.address.street,
+          city: req.body.address ? req.body.address.city : user.person.address.city,
+          state: req.body.address ? req.body.address.state : user.person.address.state,
+          zip: req.body.address ? req.body.address.zip : user.person.address.zip
         }, { transaction: t });
 
         const person = await user.person.update({
-          name: req.body.person.name,
-          number: req.body.person.number,
+          name: req.body.person ? req.body.person.name : user.person.name,
+          number: req.body.person ? req.body.person.number : user.person.number,
         }, { transaction: t });
 
         await person.setAddress(address, { transaction: t });
