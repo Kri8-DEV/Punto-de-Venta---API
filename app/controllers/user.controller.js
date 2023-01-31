@@ -152,4 +152,67 @@ module.exports.delete = async (req, res) => {
     error.status = error.status || 500;
     res.status(error.status).send({ message: error.message });
   }
-}
+};
+
+// Update User
+module.exports.update = async (req, res) => {
+  try {
+    const user = await User.findOne({
+      where: {
+        id: req.params.id
+      }
+    });
+
+    if (!user)
+      throw { message: "User not found", status: 404 };
+
+    const result = await sequelize.transaction(async (t) => {
+
+        if (req.body.address == null)
+          throw { message: "Address is required", status: 400 };
+
+        if (req.body.person == null)
+          throw { message: "Person is required", status: 400 };
+
+        const role = db.ROLES[req.body.role]
+        if (role == null)
+          throw { message: "Role no found", status: 400 };
+
+        const address = await user.person.address.update({
+          street: req.body.address.street,
+          city: req.body.address.city,
+          state: req.body.address.state,
+          zip: req.body.address.zip
+        }, { transaction: t });
+
+        const person = await user.person.update({
+          name: req.body.person.name,
+          number: req.body.person.number,
+        }, { transaction: t });
+
+        await person.setAddress(address, { transaction: t });
+
+        await user.update({
+          username: req.body.username,
+          email: req.body.email,
+          password: req.body.password ? bcrypt.hashSync(req.body.password, 8) : user.password,
+        }, { transaction: t });
+
+        await user.setPerson(person, { transaction: t });
+
+        await user.setRole(role, { transaction: t });
+
+        return User.findOne({
+          where: {
+            id: user.id
+          },
+          transaction: t
+        });
+      });
+
+      res.send({ message: "User was updated successfully", data: { user: result } });
+  } catch (error) {
+    error.status = error.status || 500;
+    res.status(error.status).send({ message: error.message });
+  }
+};
