@@ -3,7 +3,7 @@ paths:
     post:
       tags:
         - Authentication
-      description: Sign in to the application
+      description: Sign in to the application and get a JWT token
       parameters:
         - name: credentials
           in: body
@@ -34,7 +34,7 @@ paths:
     post:
       tags:
         - Authentication
-      description: Sign up to the application and get a JWT token
+      description: Sign up to the application
       security:
       - Bearer: []
       parameters:

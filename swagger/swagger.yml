@@ -11,6 +11,29 @@ components:
       name: authorization
       in: header
 definitions:
+  address:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+        description: Internal address ID
+      street:
+        type: string
+        example: 1234 Main Street
+        description: Street address
+      city:
+        type: string
+        example: San Francisco
+        description: City
+      state:
+        type: string
+        example: CA
+        description: State
+      zip:
+        type: string
+        example: 94111
+        description: Zip code
   createdAt:
     type: string
     example: 2023-01-28T03:37:33.114Z
@@ -40,25 +63,19 @@ definitions:
   signIn:
     type: object
     properties:
-      id:
-        type: uuid
-        example: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
-        description: Internal user ID
-      username:
+      message:
         type: string
-        example: Rodrigo Sebastián
-        description: User name
-      email:
-        type: string
-        example: rodrigo@nutrimax.mx
-        description: User email
-      role:
-        type: string
-        example: admin
-        description: User role name
-      accessToken:
-        type: string
-        description: JWT token
+        example: User was logged in successfully
+        description: User was logged in successfully
+      data:
+        type: object
+        properties:
+          token:
+            type: string
+            example: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+            description: JWT token
+          user:
+            $ref: '#/definitions/user'
   signUp:
     type: object
     properties:
@@ -69,27 +86,56 @@ definitions:
       data:
         type: object
         properties:
-          id:
-            type: uuid
-            example: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
-            description: Internal user ID
-          username:
-            type: string
-            example: Rodrigo Sebastián
-            description: User name
-          email:
-            type: string
-            example: rodrigo@krieight.com
-            description: User email
-          roleId:
-            type: integer
-            example: 1
-            description: User role ID
-          updatedAt:
-            $ref: '#/definitions/updatedAt'
-          createdAt:
-            $ref: '#/definitions/createdAt'
+          user:
+            $ref: '#/definitions/user'
   updatedAt:
     type: string
     example: 2023-01-28T03:37:33.114Z
     description: Last update date
+  person:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+        description: Internal person ID
+      name:
+        type: string
+        example: Kri Eight
+        description: Person name
+      number:
+        type: string
+        example: 7441234567
+        description: Person cellphone number
+      address:
+        $ref: '#/definitions/address'
+  role:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+        description: Internal role ID
+      name:
+        type: string
+        example: admin
+        description: Role name
+  user:
+    type: object
+    properties:
+      id:
+        type: uuid
+        example: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+        description: Internal user ID
+      username:
+        type: string
+        example: Admin KRI
+        description: User name
+      email:
+        type: string
+        example: admin@krieight.com
+        description: User email
+      role:
+        $ref: '#/definitions/role'
+      person:
+        $ref: '#/definitions/person'

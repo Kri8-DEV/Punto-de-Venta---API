@@ -39,7 +39,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Routes
-
 require('./app/routes/auth.routes')(app);
 
 app.get('/', (req, res) => {

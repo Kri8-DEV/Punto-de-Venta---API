@@ -62,7 +62,7 @@ module.exports.signup = async (req, res) => {
       });
     });
 
-    res.send({ message: "User was registered successfully", user: result });
+    res.send({ message: "User was registered successfully", data: { user: result } });
   } catch (error) {
     error.status = error.status || 500;
     res.status(error.status).send({ message: error.message });
@@ -99,7 +99,7 @@ module.exports.signin = async (req, res) => {
     });
 
     delete user.dataValues.password;
-    res.status(200).send({ message: "Login successful", token: token, user: user });
+    res.status(200).send({ message: "Login successful", data: { token: token, user: user } });
 
   } catch (error) {
     error.status = error.status || 500;

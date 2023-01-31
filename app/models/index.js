@@ -59,7 +59,7 @@ db.person.belongsTo(db.address,{
 // Scopes
 db.user.addScope('defaultScope', {
   attributes: {
-    exclude: ["password", "personId", "roleId"]
+    exclude: ["password", "personId", "roleId", "createdAt", "updatedAt"]
   },
   include: [
     { model: db.role, as: 'role' },
@@ -67,6 +67,12 @@ db.user.addScope('defaultScope', {
       { model: db.address, as: 'address' }
     ] }
   ]
+}, { override: true });
+
+db.role.addScope('defaultScope', {
+  attributes: {
+    exclude: ["createdAt", "updatedAt"]
+  }
 }, { override: true });
 
 db.user.addScope('withPassword', {
