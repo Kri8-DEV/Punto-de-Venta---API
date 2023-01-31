@@ -10,11 +10,18 @@ module.exports = function(app) {
     next();
   });
 
+  // Retrieve all Users
   app.get('/api/users',
   [authToken,authRole("admin")],
   controller.findAll);
 
+  // Create a new User
   app.post('/api/user/create',
   [authToken,authRole("admin")],
   controller.create);
+
+  // Retrieve a single User with id
+  app.get('/api/user/:id',
+  [authToken,authRole("admin")],
+  controller.findOne);
 };

@@ -23,6 +23,25 @@ module.exports.findAll = async (req, res) => {
   }
 };
 
+// Find a single User with an id
+module.exports.findOne = async (req, res) => {
+  try {
+    const user = await User.findOne({
+      where: {
+        id: req.params.id
+      }
+    });
+
+    if (!user)
+      throw { message: "User not found", status: 404 };
+
+    res.status(200).send(user);
+  } catch (error) {
+    error.status = error.status || 500;
+    res.status(error.status).send({ message: error.message });
+  }
+};
+
 // Save User to database
 module.exports.create = async (req, res) => {
   try {
