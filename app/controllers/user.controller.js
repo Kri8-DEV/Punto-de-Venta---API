@@ -216,3 +216,27 @@ module.exports.update = async (req, res) => {
     res.status(error.status).send({ message: error.message });
   }
 };
+
+// Reactivate User
+module.exports.reactivate = async (req, res) => {
+  try {
+    const user = await User.findOne({
+      where: {
+        id: req.params.id,
+        active: false
+      }
+    });
+
+    if (!user)
+      throw { message: "User not found", status: 404 };
+
+    await user.update({
+      active: true
+    });
+
+    res.send({ message: "User was reactivated successfully", data: { user: user } });
+  } catch (error) {
+    error.status = error.status || 500;
+    res.status(error.status).send({ message: error.message });
+  }
+};

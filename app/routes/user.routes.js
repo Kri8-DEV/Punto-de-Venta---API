@@ -29,4 +29,7 @@ module.exports = function(app) {
 
   // Update a User with id
   app.put('/api/user/:id', controller.update);
+
+  // Reactivate a User with id
+  app.put('/api/user/reactivate/:id', controller.reactivate);
 };
