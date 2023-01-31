@@ -14,7 +14,16 @@ const Role = db.role;
 // Retrieve all Users from the database
 module.exports.findAll = async (req, res) => {
   try {
-    const users = await db.user.findAll();
+    let showDeactivated = req.query.showDeactivated ? req.query.showDeactivated == "true" : false;
+
+    const users = await db.user.findAll({
+      order: [
+        ['createdAt', 'DESC']
+      ],
+      where: {
+        active: showDeactivated ? { [Op.or]: [true, false] } : true
+      },
+    });
 
     res.status(200).send(users);
   } catch (error) {
@@ -99,3 +108,48 @@ module.exports.create = async (req, res) => {
     res.status(error.status).send({ message: error.message });
   }
 };
+
+// Deactivate User
+module.exports.deactivate = async (req, res) => {
+  try {
+    const user = await User.findOne({
+      where: {
+        id: req.params.id
+      }
+    });
+
+    if (!user)
+      throw { message: "User not found", status: 404 };
+
+    await user.update({
+      active: false
+    });
+
+    res.send({ message: "User was deactivated successfully" });
+  } catch (error) {
+    error.status = error.status || 500;
+    res.status(error.status).send({ message: error.message });
+  }
+};
+
+// Delete User
+module.exports.delete = async (req, res) => {
+  try {
+    const user = await User.findOne({
+      where: {
+        id: req.params.id,
+        active: [true, false]
+      }
+    });
+
+    if (!user)
+      throw { message: "User not found", status: 404 };
+
+    await user.destroy();
+
+    res.send({ message: "User was deleted successfully" });
+  } catch (error) {
+    error.status = error.status || 500;
+    res.status(error.status).send({ message: error.message });
+  }
+}

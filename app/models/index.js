@@ -58,6 +58,9 @@ db.person.belongsTo(db.address,{
 
 // Scopes
 db.user.addScope('defaultScope', {
+  where: {
+    active: true
+  },
   attributes: {
     exclude: ["password", "personId", "roleId", "createdAt", "updatedAt"]
   },

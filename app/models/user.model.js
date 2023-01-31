@@ -29,7 +29,11 @@ module.exports = (sequelize, Sequelize) => {
         notNull: { args: true, msg: "Password cannot be null" },
         notEmpty: { args: true, msg: "Password is required" },
       }
-    }
+    },
+    active: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: true
+    },
   });
 
   return User;

@@ -12,16 +12,26 @@ module.exports = function(app) {
 
   // Retrieve all Users
   app.get('/api/users',
-  [authToken,authRole("admin")],
+  // [authToken,authRole("admin")],
   controller.findAll);
 
   // Create a new User
   app.post('/api/user/create',
-  [authToken,authRole("admin")],
+  // [authToken,authRole("admin")],
   controller.create);
 
   // Retrieve a single User with id
   app.get('/api/user/:id',
-  [authToken,authRole("admin")],
+  // [authToken,authRole("admin")],
   controller.findOne);
+
+  // Deactivate a User with id
+  app.delete('/api/user/:id',
+  // [authToken,authRole("admin")],
+  controller.deactivate);
+
+  // Delete a User with id
+  app.delete('/api/user/delete/:id',
+  // [authToken,authRole("admin")],
+  controller.delete);
 };
