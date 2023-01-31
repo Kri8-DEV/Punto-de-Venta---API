@@ -135,6 +135,10 @@ definitions:
         type: string
         example: admin@krieight.com
         description: User email
+      active:
+        type: boolean
+        example: true
+        description: User active status
       role:
         $ref: '#/definitions/role'
       person:
