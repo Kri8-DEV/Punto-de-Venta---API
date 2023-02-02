@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const db = require("./app/models");
 const db_seed = require("./app/config/db.seed.js");
 const { authToken } = require("./app/middleware/authJwt.js");
+const { validateUserLevel } = require("./app/middleware/validateUserLevel.js");
 
 // Config
 const app = express();
@@ -33,17 +34,18 @@ if (fs.existsSync('./spec/requests')) {
 }
 const swaggerDocument = mergeYaml(['./swagger/swagger.yml'].concat(files.map(file => './spec/requests/' + file)))
 
-// Middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// Middleware for all routes
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/api/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+  app.use('/api/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Routes
-require('./app/routes/auth.routes')(app);
+  require('./app/routes/auth.routes')(app);
 
-app.use(authToken);
-require('./app/routes/user.routes')(app);
+  // Middleware for all routes below
+  app.use([authToken, validateUserLevel]);
+  require('./app/routes/user.routes')(app);
 
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to KRI Eight - API' });

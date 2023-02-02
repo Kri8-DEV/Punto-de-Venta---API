@@ -1,9 +1,8 @@
 const db = require("../models");
 const sequelize = db.sequelize;
-const ROLE = require("../config/role_list");
+const ROLE = require("../config/roleList");
 
 const Op = db.Sequelize.Op;
-var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
 const User = db.user;
@@ -56,21 +55,13 @@ module.exports.create = async (req, res) => {
   try {
     const result = await sequelize.transaction(async (t) => {
 
-      const roleId = ROLE[req.body.role.toUpperCase()]
       const role = await Role.findOne({
         where: {
-          id: roleId
+          id: req.roleId
         }
       });
 
-      if (role == null) throw { message: "Role no found", status: 400 };
-
-      if (role.id == ROLE.ADMIN){
-        if (req.userRole != ROLE.SUPERADMIN)
-          throw { message: "Only superadmin can create admin", status: 403 };
-      }
-
-      if(req.body.password == null || req.body.password == "")
+      if (req.body.password == null || req.body.password == "")
         throw { message: "Password is required", status: 400 };
 
       if (req.body.address == null)
@@ -168,21 +159,11 @@ module.exports.delete = async (req, res) => {
 module.exports.update = async (req, res) => {
   try {
 
-    const roleId = ROLE[req.body.role.toUpperCase()]
     const role = await Role.findOne({
       where: {
-        id: roleId
+        id: req.roleId
       }
     });
-
-    if (role == null) throw { message: "Role no found", status: 400 };
-
-    if (role.id == ROLE.SUPERADMIN) throw { message: "Only can be one superadmin", status: 403 };
-
-    if (role.id == ROLE.ADMIN) {
-      if (req.userRole != ROLE.SUPERADMIN)
-        throw { message: "Only superadmin can update an admin", status: 403 };
-    }
 
     const user = await User.findOne({
       where: {
@@ -192,12 +173,10 @@ module.exports.update = async (req, res) => {
 
     if (!user) throw { message: "User not found", status: 404 };
 
-    if (user.role.id == ROLE.ADMIN || user.role.id == ROLE.SUPERADMIN) {
-      if (req.userRole != ROLE.SUPERADMIN)
-        throw { message: "Only superadmin can update an admin", status: 403 };
-    }
-
     const result = await sequelize.transaction(async (t) => {
+      if ([ROLE.ADMIN, ROLE.SUPERADMIN].includes(user.role.id))
+        throw { message: "You are not authorized to update user", status: 401 };
+
       const address = await user.person.address.update({
         street: req.body.address ? req.body.address.street : user.person.address.street,
         city: req.body.address ? req.body.address.city : user.person.address.city,

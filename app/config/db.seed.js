@@ -1,14 +1,11 @@
-const ROLE_LIST = require("./role_list.js");
+const ROLE_LIST = require("./roleList.js");
 const bcrypt = require("bcryptjs");
 require('dotenv').config();
 
-module.exports.initial = function(db) {
+module.exports.initial = function (db) {
 
   const Role = db.role;
   const User = db.user;
-  const Person = db.person;
-  const Address = db.address;
-
 
   Role.create({
     id: ROLE_LIST.SUPERADMIN,
