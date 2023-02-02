@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 
 const db = require("./app/models");
 const db_seed = require("./app/config/db.seed.js");
+const { authToken } = require("./app/middleware/authJwt.js");
 
 // Config
 const app = express();
@@ -40,6 +41,8 @@ app.use('/api/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Routes
 require('./app/routes/auth.routes')(app);
+
+app.use(authToken);
 require('./app/routes/user.routes')(app);
 
 app.get('/', (req, res) => {

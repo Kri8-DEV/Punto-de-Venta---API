@@ -1,6 +1,6 @@
 const db = require("../models");
 const sequelize = db.sequelize;
-const config = require("../config/auth.config");
+const ROLE = require("../config/role_list");
 
 const Op = db.Sequelize.Op;
 var jwt = require("jsonwebtoken");
@@ -51,10 +51,24 @@ module.exports.findOne = async (req, res) => {
   }
 };
 
-// Save User to database
+// Create User to database
 module.exports.create = async (req, res) => {
   try {
     const result = await sequelize.transaction(async (t) => {
+
+      const roleId = ROLE[req.body.role.toUpperCase()]
+      const role = await Role.findOne({
+        where: {
+          id: roleId
+        }
+      });
+
+      if (role == null) throw { message: "Role no found", status: 400 };
+
+      if (role.id == ROLE.ADMIN){
+        if (req.userRole != ROLE.SUPERADMIN)
+          throw { message: "Only superadmin can create admin", status: 403 };
+      }
 
       if(req.body.password == null || req.body.password == "")
         throw { message: "Password is required", status: 400 };
@@ -64,10 +78,6 @@ module.exports.create = async (req, res) => {
 
       if (req.body.person == null)
         throw { message: "Person is required", status: 400 };
-
-      const role = db.ROLES[req.body.role]
-      if (role == null)
-        throw { message: "Role no found", status: 400 };
 
       const address = await Address.create({
         street: req.body.address.street,
@@ -157,54 +167,70 @@ module.exports.delete = async (req, res) => {
 // Update User
 module.exports.update = async (req, res) => {
   try {
+
+    const roleId = ROLE[req.body.role.toUpperCase()]
+    const role = await Role.findOne({
+      where: {
+        id: roleId
+      }
+    });
+
+    if (role == null) throw { message: "Role no found", status: 400 };
+
+    if (role.id == ROLE.SUPERADMIN) throw { message: "Only can be one superadmin", status: 403 };
+
+    if (role.id == ROLE.ADMIN) {
+      if (req.userRole != ROLE.SUPERADMIN)
+        throw { message: "Only superadmin can update an admin", status: 403 };
+    }
+
     const user = await User.findOne({
       where: {
         id: req.params.id
       }
     });
 
-    if (!user)
-      throw { message: "User not found", status: 404 };
+    if (!user) throw { message: "User not found", status: 404 };
+
+    if (user.role.id == ROLE.ADMIN || user.role.id == ROLE.SUPERADMIN) {
+      if (req.userRole != ROLE.SUPERADMIN)
+        throw { message: "Only superadmin can update an admin", status: 403 };
+    }
 
     const result = await sequelize.transaction(async (t) => {
+      const address = await user.person.address.update({
+        street: req.body.address ? req.body.address.street : user.person.address.street,
+        city: req.body.address ? req.body.address.city : user.person.address.city,
+        state: req.body.address ? req.body.address.state : user.person.address.state,
+        zip: req.body.address ? req.body.address.zip : user.person.address.zip
+      }, { transaction: t });
 
-      const role = db.ROLES[req.body.role]
-        if (role == null)
-          throw { message: "Role no found", status: 400 };
+      const person = await user.person.update({
+        name: req.body.person ? req.body.person.name : user.person.name,
+        number: req.body.person ? req.body.person.number : user.person.number,
+      }, { transaction: t });
 
-        const address = await user.person.address.update({
-          street: req.body.address ? req.body.address.street : user.person.address.street,
-          city: req.body.address ? req.body.address.city : user.person.address.city,
-          state: req.body.address ? req.body.address.state : user.person.address.state,
-          zip: req.body.address ? req.body.address.zip : user.person.address.zip
-        }, { transaction: t });
+      await person.setAddress(address, { transaction: t });
 
-        const person = await user.person.update({
-          name: req.body.person ? req.body.person.name : user.person.name,
-          number: req.body.person ? req.body.person.number : user.person.number,
-        }, { transaction: t });
+      await user.update({
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password ? bcrypt.hashSync(req.body.password, 8) : user.password,
+      }, { transaction: t });
 
-        await person.setAddress(address, { transaction: t });
+      await user.setPerson(person, { transaction: t });
 
-        await user.update({
-          username: req.body.username,
-          email: req.body.email,
-          password: req.body.password ? bcrypt.hashSync(req.body.password, 8) : user.password,
-        }, { transaction: t });
+      await user.setRole(role, { transaction: t });
 
-        await user.setPerson(person, { transaction: t });
-
-        await user.setRole(role, { transaction: t });
-
-        return User.findOne({
-          where: {
-            id: user.id
-          },
-          transaction: t
-        });
+      return User.findOne({
+        where: {
+          id: user.id
+        },
+        transaction: t
       });
+    });
 
-      res.send({ message: "User was updated successfully", data: { user: result } });
+    res.send({ message: "User was updated successfully", data: { user: result } });
   } catch (error) {
     error.status = error.status || 500;
     res.status(error.status).send({ message: error.message });
