@@ -1,5 +1,6 @@
 const controller = require("../controllers/user.controller");
-const { authToken, authRole } = require("../middleware/authJwt");
+const { verifyRoles } = require("../middleware/verifyRoles");
+const ROLE = require("../config/role_list");
 
 module.exports = function(app) {
   app.use(function(req, res, next) {
@@ -10,26 +11,38 @@ module.exports = function(app) {
     next();
   });
 
-  app.use(authToken, authRole("admin"))
-
   // Retrieve all Users
-  app.get('/api/users', controller.findAll);
+  app.get('/api/users',
+    verifyRoles(ROLE.SUPERADMIN, ROLE.ADMIN),
+  controller.findAll);
 
   // Create a new User
-  app.post('/api/user/create', controller.create);
+  app.post('/api/user/create',
+    verifyRoles(ROLE.SUPERADMIN, ROLE.ADMIN),
+  controller.create);
 
   // Retrieve a single User with id
-  app.get('/api/user/:id', controller.findOne);
+  app.get('/api/user/:id',
+    verifyRoles(ROLE.SUPERADMIN, ROLE.ADMIN),
+  controller.findOne);
 
   // Deactivate a User with id
-  app.delete('/api/user/:id', controller.deactivate);
+  app.delete('/api/user/:id',
+    verifyRoles(ROLE.SUPERADMIN, ROLE.ADMIN),
+  controller.deactivate);
 
   // Delete a User with id
-  app.delete('/api/user/delete/:id', controller.delete);
+  app.delete('/api/user/delete/:id',
+    verifyRoles(ROLE.SUPERADMIN, ROLE.ADMIN),
+  controller.delete);
 
   // Update a User with id
-  app.put('/api/user/:id', controller.update);
+  app.put('/api/user/:id',
+    verifyRoles(ROLE.SUPERADMIN, ROLE.ADMIN),
+  controller.update);
 
   // Reactivate a User with id
-  app.put('/api/user/reactivate/:id', controller.reactivate);
+  app.put('/api/user/reactivate/:id',
+    verifyRoles(ROLE.SUPERADMIN, ROLE.ADMIN),
+  controller.reactivate);
 };

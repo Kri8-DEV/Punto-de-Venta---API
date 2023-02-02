@@ -15,12 +15,7 @@ module.exports = (sequelize, Sequelize) => {
     },
     email: {
       type: Sequelize.STRING(191),
-      unique: { args: true, msg: "Email address already in use" },
-      allowNull: false,
-      validate: {
-        isEmail: { args: true, msg: "Email address must be valid" },
-        notNull: { args: true, msg: "Email address cannot be null" },
-      }
+      unique: { args: true, msg: "Email address already in use" }
     },
     password: {
       type: Sequelize.STRING,
