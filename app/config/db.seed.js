@@ -48,29 +48,4 @@ module.exports.initial = function(db) {
       "number": "7271190177"
     }
   })
-
-  for(let i = 1; i <= 10; i++){
-    let address = Address.create({
-      id: i,
-      street: `street${i}`,
-      city: `city${i}`,
-      state: `state${i}`,
-      zip: `zip${i}`
-    });
-
-    let person = Person.create({
-      id: i,
-      name: `name${i}`,
-      number: `number${i}`,
-      addressId: address.id
-    });
-
-    let user = User.create({
-      username: `user${i}`,
-      email: `user${i}@krieight.com`,
-      password: bcrypt.hashSync(`12345678`, 8),
-      roleId: ROLE_LIST.USER,
-      personId: person.id
-    });
-  }
 }
