@@ -39,6 +39,13 @@ const swaggerDocument = mergeYaml(['./swagger/swagger.yml'].concat(files.map(fil
   app.use(bodyParser.urlencoded({ extended: true }));
 
   app.use('/api/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+  app.use(function(req, res, next) {
+    res.header(
+      "Access-Control-Allow-Headers",
+      "x-access-token, Origin, Content-Type, Accept"
+    );
+    next();
+  });
 
 // Routes
   require('./app/routes/auth.routes')(app);
@@ -46,6 +53,7 @@ const swaggerDocument = mergeYaml(['./swagger/swagger.yml'].concat(files.map(fil
   // Middleware for all routes below
   app.use([authToken, validateUserLevel]);
   require('./app/routes/user.routes')(app);
+  require('./app/routes/product.routes')(app);
 
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to KRI Eight - API' });

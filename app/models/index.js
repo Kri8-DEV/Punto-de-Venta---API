@@ -27,6 +27,7 @@ db.user = require('./user.model')(sequelize, Sequelize);
 db.role = require('./role.model')(sequelize, Sequelize);
 db.address = require('./address.model')(sequelize, Sequelize);
 db.person = require('./person.model')(sequelize, Sequelize);
+db.product = require('./product.model')(sequelize, Sequelize);
 
 // Relationships
 db.person.hasOne(db.user);
@@ -73,6 +74,9 @@ db.user.addScope('defaultScope', {
 }, { override: true });
 
 db.role.addScope('defaultScope', {
+  order: [
+    ['createdAt', 'DESC']
+  ],
   attributes: {
     exclude: ["createdAt", "updatedAt"]
   }
@@ -89,6 +93,13 @@ db.person.addScope('defaultScope', {
 }, { override: true });
 
 db.address.addScope('defaultScope', {
+  attributes: { exclude: ['createdAt', 'updatedAt'] },
+}, { override: true });
+
+db.product.addScope('defaultScope', {
+  order: [
+    ['createdAt', 'DESC']
+  ],
   attributes: { exclude: ['createdAt', 'updatedAt'] },
 }, { override: true });
 

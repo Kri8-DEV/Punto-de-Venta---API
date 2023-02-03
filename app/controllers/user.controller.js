@@ -16,9 +16,6 @@ module.exports.findAll = async (req, res) => {
     let showDeactivated = req.query.showDeactivated ? req.query.showDeactivated == "true" : false;
 
     const users = await db.user.findAll({
-      order: [
-        ['createdAt', 'DESC']
-      ],
       where: {
         active: showDeactivated ? { [Op.or]: [true, false] } : true
       },
