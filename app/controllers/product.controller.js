@@ -121,7 +121,7 @@ module.exports.deactivate = async (req, res) => {
       return up_product;
     });
 
-    res.status(200).send({ message: "Product deactivated successfully", data: { product: product } });
+    res.status(200).send({ message: "Product deactivated successfully" });
   } catch(err) {
     err.status = err.status || 500;
     res.status(err.status).send({ message: err.message });

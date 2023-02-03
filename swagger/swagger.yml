@@ -147,3 +147,40 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/user'
+  product:
+    type: object
+    properties:
+      sku:
+        type: string
+        example: 123456
+        description: Product SKU
+      name:
+        type: string
+        example: Product 1
+        description: Product name
+      description:
+        type: string
+        example: Product 1 description
+        description: Product description
+      price:
+        type: number
+        format: currency
+        example: 100
+        description: Product price
+      kg_price:
+        type: number
+        format: currency
+        example: 100
+        description: Product price per kg
+      image:
+        type: string
+        format: binary
+        description: Product image
+      weight:
+        type: number
+        example: 100
+        description: Product weight
+      active:
+        type: boolean
+        example: true
+        description: Product active status

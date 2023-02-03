@@ -1,27 +1,41 @@
 paths:
-  /api/users:
+  /api/products:
     get:
       tags:
-        - User
-      description: Get all users
+        - Product
+      description: Get all products
       security:
         - Bearer: []
       parameters:
         - name: showDeactivated
           in: query
-          description: Show deactivated users
+          description: Show deactivated products
           required: false
           schema:
             type: boolean
       responses:
         '200':
-          description: Users retrieved
+          description: OK
           content:
             application/json:
               schema:
-                $ref: '#/definitions/users'
+                type: array
+                items:
+                  $ref: '#/definitions/product'
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '404':
+          description: Not Found
           content:
             application/json:
               schema:
@@ -32,29 +46,35 @@ paths:
             application/json:
               schema:
                 $ref: '#/definitions/error'
-  /api/users/:id:
+  /api/product/:sku:
     get:
       tags:
-        - User
-      description: Get a specific user
+        - Product
+      description: Get a specific product by SKU
       security:
         - Bearer: []
       parameters:
-        - name: id
+        - name: sku
           in: path
-          description: User ID
+          description: Product SKU
           required: true
           schema:
-            type: UUID
+            type: string
       responses:
         '200':
-          description: User retrieved
+          description: OK
           content:
             application/json:
               schema:
-                $ref: '#/definitions/user'
+                $ref: '#/definitions/product'
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -71,56 +91,124 @@ paths:
             application/json:
               schema:
                 $ref: '#/definitions/error'
-  /api/user/create:
+    put:
+      tags:
+        - Product
+      description: Update a product
+      security:
+        - Bearer: []
+      parameters:
+        - name: sku
+          in: path
+          description: Product SKU
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/product'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Product updated successfully
+                  product:
+                    $ref: '#/definitions/product'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+    delete:
+      tags:
+        - Product
+      description: Deactivate a product
+      security:
+        - Bearer: []
+      parameters:
+        - name: sku
+          in: path
+          description: Product SKU
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Product deactivated successfully
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+  /api/product/create:
     post:
       tags:
-        - User
-      description: Create a new user
-      security:
-      - Bearer: []
-      parameters:
-        - name: credentials
-          in: body
-          description: User credentials
-          required: true
-          schema:
-            $ref: '#/definitions/credentials'
-      responses:
-        '200':
-          description: User registered
-          content:
-            application/json:
-              schema:
-                $ref: '#/definitions/signUp'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/definitions/error'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/definitions/error'
-  /api/user/:id:
-    delete:
-      tags:
-        - User
-      description: Deactivate a user
+        - Product
+      description: Create a new product
       security:
         - Bearer: []
-      parameters:
-        - name: id
-          in: path
-          description: User ID
-          required: true
-          schema:
-            type: UUID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/product'
       responses:
         '200':
-          description: User deactivated
+          description: OK
           content:
             application/json:
               schema:
@@ -128,158 +216,17 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: User was deactivated successfully
-                    description: User was deactivated successfully
+                    example: Product created successfully
+                  product:
+                    $ref: '#/definitions/product'
         '401':
           description: Unauthorized
           content:
             application/json:
               schema:
                 $ref: '#/definitions/error'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/definitions/error'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/definitions/error'
-  /api/user/delete/:id:
-    delete:
-      tags:
-        - User
-      description: Delete a user
-      security:
-        - Bearer: []
-      parameters:
-        - name: id
-          in: path
-          description: User ID
-          required: true
-          schema:
-            type: UUID
-      responses:
-        '200':
-          description: User deleted
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: User was deleted successfully
-                    description: User was deleted successfully
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/definitions/error'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/definitions/error'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/definitions/error'
-  /api/user/update/:id:
-    put:
-      tags:
-        - User
-      description: Update a user
-      security:
-        - Bearer: []
-      parameters:
-        - name: id
-          in: path
-          description: User ID
-          required: true
-          schema:
-            type: UUID
-        - name: user
-          in: body
-          description: User properties
-          required: true
-          schema:
-            $ref: '#/definitions/user'
-      responses:
-        '200':
-          description: User updated
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: User was updated successfully
-                    description: User was updated successfully
-                  data:
-                    type: object
-                    properties:
-                      user:
-                        $ref: '#/definitions/user'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/definitions/error'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/definitions/error'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/definitions/error'
-  /api/user/reactivate/:id:
-    put:
-      tags:
-        - User
-      description: Reactivate a user
-      security:
-        - Bearer: []
-      parameters:
-        - name: id
-          in: path
-          description: User ID
-          required: true
-          schema:
-            type: UUID
-      responses:
-        '200':
-          description: User reactivated
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: User was reactivated successfully
-                    description: User was reactivated successfully
-                  data:
-                    type: object
-                    properties:
-                      user:
-                        $ref: '#/definitions/user'
-        '401':
-          description: Unauthorized
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
