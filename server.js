@@ -2,6 +2,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 const bodyParser = require('body-parser');
 
@@ -37,6 +38,7 @@ const swaggerDocument = mergeYaml(['./swagger/swagger.yml'].concat(files.map(fil
 // Middleware for all routes
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(cookieParser());
 
   app.use('/api/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   app.use(function(req, res, next) {

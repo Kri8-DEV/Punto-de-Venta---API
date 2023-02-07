@@ -43,7 +43,9 @@ module.exports.signin = async (req, res) => {
     let refreshToken = await RefreshToken.createToken(user);
 
     delete user.dataValues.password;
-    res.status(200).send({ message: "Login successful", data: { token: token, refreshToken: refreshToken , user: user } });
+
+    res.cookie("refreshToken", refreshToken, { httpOnly: true, sameSite: "None", maxAge: config.jwtRefreshExpiration * 1000, secure: true });
+    res.status(200).send({ message: "Login successful", data: { token: token, user: user } });
 
   } catch (error) {
     error.status = error.status || 500;
@@ -53,9 +55,11 @@ module.exports.signin = async (req, res) => {
 
 // Refresh token
 module.exports.refreshToken = async (req, res) => {
-  const { refreshToken: requestToken } = req.body;
+  const cookies = req.cookies;
 
-  if (requestToken  == null) return res.status(400).send({ message: "Refresh token is required" });
+  if (!cookies?.refreshToken) return res.status(403).send({ message: "Refresh token is missing" });
+
+  const requestToken = cookies.refreshToken;
 
   try {
     let refreshToken = await RefreshToken.findOne({
@@ -80,7 +84,7 @@ module.exports.refreshToken = async (req, res) => {
       expiresIn: config.jwtExpiration
     });
 
-    return res.status(200).send({ message: "Access token refreshed", data: { token: newAccessToken, refreshToken: refreshToken.token } });
+    return res.status(200).send({ message: "Access token refreshed", data: { token: newAccessToken } });
   } catch (error) {
     error.status = error.status || 500;
     res.status(error.status).send({ message: error.message });
