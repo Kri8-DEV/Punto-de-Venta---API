@@ -28,6 +28,7 @@ db.role = require('./role.model')(sequelize, Sequelize);
 db.address = require('./address.model')(sequelize, Sequelize);
 db.person = require('./person.model')(sequelize, Sequelize);
 db.product = require('./product.model')(sequelize, Sequelize);
+db.refreshToken = require('./refreshToken.model')(sequelize, Sequelize);
 
 // Relationships
 db.person.hasOne(db.user);
@@ -55,6 +56,15 @@ db.person.belongsTo(db.address,{
     allowNull: false
   },
   onDelete: 'CASCADE'
+});
+
+db.refreshToken.belongsTo(db.user, {
+  foreignKey: 'userId',
+  targetKey: 'id'
+});
+db.user.hasOne(db.refreshToken, {
+  foreignKey: 'userId',
+  targetKey: 'id'
 });
 
 // Scopes

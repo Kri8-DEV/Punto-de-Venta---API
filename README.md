@@ -15,8 +15,9 @@ Install all the next dependencies for the project:
 - bcryptjs
 - jsonwebtoken
 - sequelize
+- uuid
 
-```npm i nodemon express mysql2 cors morgan dotenv body-parser bcryptjs jsonwebtoken sequelize --save```
+```npm i nodemon express mysql2 cors morgan dotenv body-parser bcryptjs jsonwebtoken sequelize uuid --save```
 
 Install Swagger dependencies:
 - swagger-jsdoc
