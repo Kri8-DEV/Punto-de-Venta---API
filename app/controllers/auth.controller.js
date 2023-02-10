@@ -44,7 +44,10 @@ module.exports.signin = async (req, res) => {
 
     delete user.dataValues.password;
 
-    res.cookie("refreshToken", refreshToken, { httpOnly: true, sameSite: "None", maxAge: config.jwtRefreshExpiration * 1000, secure: true });
+    res.cookie("refreshToken", refreshToken, { httpOnly: true, sameSite: "None",
+    // TODO: Change to true when in production
+    // secure: True,
+    maxAge: config.jwtRefreshExpiration * 1000 });
     res.status(200).send({ message: "Login successful", data: { token: token, user: user } });
 
   } catch (error) {
@@ -90,3 +93,31 @@ module.exports.refreshToken = async (req, res) => {
     res.status(error.status).send({ message: error.message });
   };
 };
+
+// Logout
+module.exports.logout = async (req, res) => {
+  try {
+    const cookies = req.cookies;
+
+    if (!cookies?.refreshToken) return res.status(403).send({ message: "Refresh token is missing" });
+
+    const requestToken = cookies.refreshToken;
+
+    let refreshToken = await RefreshToken.findOne({
+      where: {
+        token: requestToken
+      }
+    });
+
+    if (!refreshToken) return res.status(403).send({ message: "Refresh token is invalid" });
+
+    RefreshToken.destroy({ where: { id: refreshToken.id } });
+
+    res.clearCookie("refreshToken");
+    res.status(200).send({ message: "Logout successful" });
+  }
+  catch (error) {
+    error.status = error.status || 500;
+    res.status(error.status).send({ message: error.message });
+  }
+}
