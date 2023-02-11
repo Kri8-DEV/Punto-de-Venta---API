@@ -30,3 +30,91 @@ paths:
             application/json:
               schema:
                 $ref: '#/definitions/error'
+  /api/auth/refreshtoken:
+    post:
+      tags:
+        - Authentication
+      description: Refresh JWT token
+      parameters:
+        - name: refreshtoken
+          in: cookie
+          description: Refresh token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Token refreshed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access token refreshed
+                  data:
+                    type: object
+                    properties:
+                      token:
+                        type: string
+                        description: JWT token
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+  /api/auth/logout:
+    post:
+      tags:
+        - Authentication
+      description: Logout to the application
+      parameters:
+        - name: refreshtoken
+          in: cookie
+          description: Refresh token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User logged out
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User logged out
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'

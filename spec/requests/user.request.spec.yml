@@ -81,10 +81,10 @@ paths:
       parameters:
         - name: credentials
           in: body
-          description: User credentials
+          description: User information (ID is not required)
           required: true
           schema:
-            $ref: '#/definitions/credentials'
+            $ref: '#/definitions/user'
       responses:
         '200':
           description: User registered
