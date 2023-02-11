@@ -27,6 +27,8 @@ db.user = require('./user.model')(sequelize, Sequelize);
 db.role = require('./role.model')(sequelize, Sequelize);
 db.address = require('./address.model')(sequelize, Sequelize);
 db.person = require('./person.model')(sequelize, Sequelize);
+db.product = require('./product.model')(sequelize, Sequelize);
+db.refreshToken = require('./refreshToken.model')(sequelize, Sequelize);
 
 // Relationships
 db.person.hasOne(db.user);
@@ -56,6 +58,15 @@ db.person.belongsTo(db.address,{
   onDelete: 'CASCADE'
 });
 
+db.refreshToken.belongsTo(db.user, {
+  foreignKey: 'userId',
+  targetKey: 'id'
+});
+db.user.hasOne(db.refreshToken, {
+  foreignKey: 'userId',
+  targetKey: 'id'
+});
+
 // Scopes
 db.user.addScope('defaultScope', {
   where: {
@@ -73,6 +84,9 @@ db.user.addScope('defaultScope', {
 }, { override: true });
 
 db.role.addScope('defaultScope', {
+  order: [
+    ['createdAt', 'DESC']
+  ],
   attributes: {
     exclude: ["createdAt", "updatedAt"]
   }
@@ -89,6 +103,13 @@ db.person.addScope('defaultScope', {
 }, { override: true });
 
 db.address.addScope('defaultScope', {
+  attributes: { exclude: ['createdAt', 'updatedAt'] },
+}, { override: true });
+
+db.product.addScope('defaultScope', {
+  order: [
+    ['createdAt', 'DESC']
+  ],
   attributes: { exclude: ['createdAt', 'updatedAt'] },
 }, { override: true });
 

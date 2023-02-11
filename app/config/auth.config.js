@@ -1,5 +1,7 @@
 require('dotenv').config();
 
 module.exports = {
-  secret: process.env.AUTH_SECRET
+  ACCESS_TOKEN_SECRET: process.env.AUTH_SECRET,
+  jwtExpiration: 2,
+  jwtRefreshExpiration: 86400,
 };
