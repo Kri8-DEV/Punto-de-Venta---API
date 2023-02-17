@@ -30,6 +30,7 @@ db.person = require('../db/person.schema')(sequelize, Sequelize);
 db.product = require('../db/product.schema')(sequelize, Sequelize);
 db.refreshToken = require('../db/refreshToken.schema')(sequelize, Sequelize);
 db.store = require('../db/store.schema')(sequelize, Sequelize);
+db.stock = require('../db/stock.schema')(sequelize, Sequelize);
 
 // Models
 require('./user.model.js')(db);
@@ -39,5 +40,6 @@ require('./person.model.js')(db);
 require('./product.model.js')(db);
 require('./refreshToken.model.js')(db);
 require('./store.model.js')(db);
+require('./stock.model.js')(db);
 
 module.exports = db;
