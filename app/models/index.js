@@ -22,95 +22,21 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
+// Schemas
+db.user = require('../db/user.schema')(sequelize, Sequelize);
+db.role = require('../db/role.schema')(sequelize, Sequelize);
+db.address = require('../db/address.schema')(sequelize, Sequelize);
+db.person = require('../db/person.schema')(sequelize, Sequelize);
+db.product = require('../db/product.schema')(sequelize, Sequelize);
+db.refreshToken = require('../db/refreshToken.schema')(sequelize, Sequelize);
+
 // Models
-db.user = require('./user.model')(sequelize, Sequelize);
-db.role = require('./role.model')(sequelize, Sequelize);
-db.address = require('./address.model')(sequelize, Sequelize);
-db.person = require('./person.model')(sequelize, Sequelize);
-db.product = require('./product.model')(sequelize, Sequelize);
-db.refreshToken = require('./refreshToken.model')(sequelize, Sequelize);
+require('./user.model.js')(db);
+require('./role.model.js')(db);
+require('./address.model.js')(db);
+require('./person.model.js')(db);
+require('./product.model.js')(db);
+require('./refreshToken.model.js')(db);
 
-// Relationships
-db.person.hasOne(db.user);
-db.user.belongsTo(db.person,{
-  foreignKey: {
-    name: 'personId',
-    allowNull: false
-  },
-  onDelete: 'CASCADE'
-});
-
-db.role.hasMany(db.user);
-db.user.belongsTo(db.role,{
-  foreignKey: {
-    name: 'roleId',
-    allowNull: false
-  },
-  onDelete: 'CASCADE'
-});
-
-db.address.hasMany(db.person);
-db.person.belongsTo(db.address,{
-  foreignKey: {
-    name: 'addressId',
-    allowNull: false
-  },
-  onDelete: 'CASCADE'
-});
-
-db.refreshToken.belongsTo(db.user, {
-  foreignKey: 'userId',
-  targetKey: 'id'
-});
-db.user.hasOne(db.refreshToken, {
-  foreignKey: 'userId',
-  targetKey: 'id'
-});
-
-// Scopes
-db.user.addScope('defaultScope', {
-  where: {
-    active: true
-  },
-  attributes: {
-    exclude: ["password", "personId", "roleId", "createdAt", "updatedAt"]
-  },
-  include: [
-    { model: db.role, as: 'role' },
-    { model: db.person, as: 'person', include: [
-      { model: db.address, as: 'address' }
-    ] }
-  ]
-}, { override: true });
-
-db.role.addScope('defaultScope', {
-  order: [
-    ['createdAt', 'DESC']
-  ],
-  attributes: {
-    exclude: ["createdAt", "updatedAt"]
-  }
-}, { override: true });
-
-db.user.addScope('withPassword', {
-  attributes: {
-    include: ["password"]
-  }
-});
-
-db.person.addScope('defaultScope', {
-  attributes: { exclude: ['addressId', 'createdAt', 'updatedAt'] },
-}, { override: true });
-
-db.address.addScope('defaultScope', {
-  attributes: { exclude: ['createdAt', 'updatedAt'] },
-}, { override: true });
-
-db.product.addScope('defaultScope', {
-  order: [
-    ['createdAt', 'DESC']
-  ],
-  attributes: { exclude: ['createdAt', 'updatedAt'] },
-}, { override: true });
 
 module.exports = db;

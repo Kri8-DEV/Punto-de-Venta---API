@@ -1,17 +1,17 @@
-module.exports = (sequelize, Sequelize) => {
-  const Person = sequelize.define("persons", {
-    id: {
-      type: Sequelize.INTEGER,
-      primaryKey: true,
-      autoIncrement: true
+module.exports = (db) => {
+  // Relationships
+  db.person.hasOne(db.user);
+
+  db.person.belongsTo(db.address,{
+    foreignKey: {
+      name: 'addressId',
+      allowNull: false
     },
-    name: {
-      type: Sequelize.STRING
-    },
-    number: {
-      type: Sequelize.STRING
-    }
+    onDelete: 'CASCADE'
   });
 
-  return Person;
-};
+  // Scopes
+  db.person.addScope('defaultScope', {
+    attributes: { exclude: ['addressId', 'createdAt', 'updatedAt'] },
+  }, { override: true });
+}

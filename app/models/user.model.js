@@ -1,35 +1,30 @@
-module.exports = (sequelize, Sequelize) => {
-  const User = sequelize.define("users", {
-    id: {
-      type: Sequelize.UUID,
-      defaultValue: Sequelize.UUIDV4,
-      primaryKey: true
+module.exports = (db) => {
+  // Relationships
+  db.user.belongsTo(db.person,{
+    foreignKey: {
+      name: 'personId',
+      allowNull: false
     },
-    username: {
-      type: Sequelize.STRING(191),
-      unique: { args: true, msg: "Username already in use" },
-      allowNull: false,
-      validate: {
-        notNull: { args: true, msg: "Username is required" },
-      }
-    },
-    email: {
-      type: Sequelize.STRING(191),
-      unique: { args: true, msg: "Email address already in use" }
-    },
-    password: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      validate: {
-        notNull: { args: true, msg: "Password cannot be null" },
-        notEmpty: { args: true, msg: "Password is required" },
-      }
-    },
-    active: {
-      type: Sequelize.BOOLEAN,
-      defaultValue: true
-    },
+    onDelete: 'CASCADE'
   });
 
-  return User;
-};
+  db.user.belongsTo(db.role,{
+    foreignKey: {
+      name: 'roleId',
+      allowNull: false
+    },
+    onDelete: 'CASCADE'
+  });
+
+  db.user.hasOne(db.refreshToken, {
+    foreignKey: 'userId',
+    targetKey: 'id'
+  });
+
+  // Scopes
+  db.user.addScope('withPassword', {
+    attributes: {
+      include: ["password"]
+    }
+  });
+}
