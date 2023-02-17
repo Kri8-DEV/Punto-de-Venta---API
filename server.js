@@ -19,10 +19,10 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-// db.sequelize.sync({force: true}).then(() => {
-//   console.log('Drop and Resync Db');
-//   db_seed.initial(db);
-// });
+db.sequelize.sync({force: true}).then(() => {
+  console.log('Drop and Resync Db');
+  db_seed.initial(db);
+});
 
 // Swagger
 const swaggerUi = require('swagger-ui-express');

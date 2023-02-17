@@ -1,5 +1,6 @@
 module.exports = (db) => {
   // Relationships
+  db.person.hasOne(db.user);
   db.user.belongsTo(db.person,{
     foreignKey: {
       name: 'personId',
@@ -8,17 +9,13 @@ module.exports = (db) => {
     onDelete: 'CASCADE'
   });
 
+  db.role.hasMany(db.user);
   db.user.belongsTo(db.role,{
     foreignKey: {
       name: 'roleId',
       allowNull: false
     },
     onDelete: 'CASCADE'
-  });
-
-  db.user.hasOne(db.refreshToken, {
-    foreignKey: 'userId',
-    targetKey: 'id'
   });
 
   // Scopes

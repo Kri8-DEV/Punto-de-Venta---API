@@ -1,6 +1,5 @@
 module.exports = (db) => {
   // Relationships
-  db.address.hasMany(db.person);
 
   // Scopes
   db.address.addScope('defaultScope', {

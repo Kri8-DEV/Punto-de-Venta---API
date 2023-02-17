@@ -1,7 +1,6 @@
 module.exports = (db) => {
   // Relationships
-  db.person.hasOne(db.user);
-
+  db.address.hasMany(db.person);
   db.person.belongsTo(db.address,{
     foreignKey: {
       name: 'addressId',
