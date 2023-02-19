@@ -1,6 +1,6 @@
 {
   "name": "kri-api",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Generic API made with NodeJS, Express and MySQL to manage a store",
   "main": "server.js",
   "scripts": {
