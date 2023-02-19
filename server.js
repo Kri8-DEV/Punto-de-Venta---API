@@ -19,6 +19,19 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
+// Internationalization
+const i18n = require('i18n-node-yaml')({
+  translationFolder: './locales',
+  locales: ['en', 'es'],
+  defaultLocale: 'es',
+  queryParameter: 'lang'
+})
+
+i18n.ready.catch((err) => {
+  console.log('Failed loading translations',err);
+});
+
+// Database
 if (process.env.NODE_ENV === 'test') {
   console.log('Using test database: ' + process.env.DB_TEST_DATABASE);
 }
@@ -41,6 +54,7 @@ if (fs.existsSync('./spec/requests')) {
 const swaggerDocument = mergeYaml(['./swagger/swagger.yml'].concat(files.map(file => './spec/requests/' + file)))
 
 // Middleware for all routes
+  app.use(i18n.middleware);
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(cookieParser());
@@ -57,7 +71,7 @@ const swaggerDocument = mergeYaml(['./swagger/swagger.yml'].concat(files.map(fil
 // Routes
   require('./app/routes/auth.routes')(app);
   app.get('/', (req, res) => {
-    res.json({ message: 'Welcome to KRI Eight - API' });
+    res.json({ message: res.locals.t('welcome') });
   });
 
   // Middleware for all routes below

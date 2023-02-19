@@ -1,0 +1,19 @@
+welcome: "Bienvenido a la API de KRI Eight"
+error:
+  model:
+    user:
+      not_found: "Usuario no encontrado"
+      invalid_password: "Contraseña inválida"
+    auth:
+      refresh_token:
+        invalid: "Token de refresco inválido"
+        expired: "Token de refresco expirado. Inicie sesión nuevamente."
+        missing: "Falta token de refresco"
+messages:
+  model:
+    user:
+      login: "El usuario ha iniciado sesión correctamente"
+    auth:
+      refresh_token:
+        refreshed: "Token de refresco actualizado correctamente"
+      logout: "El usuario ha cerrado sesión correctamente"
