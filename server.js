@@ -19,10 +19,15 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-db.sequelize.sync({force: true}).then(() => {
-  console.log('Drop and Resync Db');
-  db_seed.initial(db);
-});
+if (process.env.NODE_ENV === 'test') {
+  console.log('Using test database: ' + process.env.DB_TEST_DATABASE);
+}
+if (process.env.NODE_ENV === 'development' && process.env.DB_SYNC === 'true') {
+  db.sequelize.sync({force: true}).then(() => {
+    console.log('Drop and Resync Db');
+    db_seed.initial(db);
+  });
+}
 
 // Swagger
 const swaggerUi = require('swagger-ui-express');
@@ -51,17 +56,21 @@ const swaggerDocument = mergeYaml(['./swagger/swagger.yml'].concat(files.map(fil
 
 // Routes
   require('./app/routes/auth.routes')(app);
+  app.get('/', (req, res) => {
+    res.json({ message: 'Welcome to KRI Eight - API' });
+  });
 
   // Middleware for all routes below
   app.use([authToken, validateUserLevel]);
   require('./app/routes/user.routes')(app);
   require('./app/routes/product.routes')(app);
 
-app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to KRI Eight - API' });
-});
-
 // Start server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}.`);
 });
+
+// Export for testing
+if(process.env.NODE_ENV === 'test') {
+  module.exports = app;
+}

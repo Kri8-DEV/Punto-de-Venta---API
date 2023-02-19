@@ -25,7 +25,14 @@ Install Swagger dependencies:
 - swagger-ui-express
 - merge-yaml
 
-```npm i swagger-jsdoc swagger-ui-express merge-yaml --save```
+```npm i swagger-jsdoc swagger-ui-express merge-yaml --save-dev```
+
+Install the next dependencies for the tests:
+- mocha
+- chai
+- chai-http
+
+```npm i mocha chai chai-http --save-dev```
 
 ## Usage
 Run the next command to start the server:

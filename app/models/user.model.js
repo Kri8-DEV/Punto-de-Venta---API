@@ -19,6 +19,21 @@ module.exports = (db) => {
   });
 
   // Scopes
+  db.user.addScope('defaultScope', {
+    where: {
+      active: true
+    },
+    attributes: {
+      exclude: ["password", "personId", "roleId", "createdAt", "updatedAt"]
+    },
+    include: [
+      { model: db.role, as: 'role' },
+      { model: db.person, as: 'person', include: [
+        { model: db.address, as: 'address' }
+      ] }
+    ]
+  }, { override: true });
+  
   db.user.addScope('withPassword', {
     attributes: {
       include: ["password"]
