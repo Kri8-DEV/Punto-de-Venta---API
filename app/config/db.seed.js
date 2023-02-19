@@ -6,6 +6,8 @@ module.exports.initial = async function (db) {
 
   const Role = db.role;
   const User = db.user;
+  const Person = db.person;
+  const Address = db.address;
 
   await Role.create({
     id: ROLE_LIST.SUPERADMIN,
@@ -29,22 +31,27 @@ module.exports.initial = async function (db) {
     roleId: ROLE_LIST.SUPERADMIN
   });
 
+  const address = await Address.create({
+    street: "1234 Main St",
+    city: "San Diego",
+    state: "CA",
+    zip: "92101"
+  });
+
   await User.create({
     "username": "Isra KRI",
     "email": "Isra@krieight.com",
-    "roleId": ROLE_LIST.ADMIN,
     "password": bcrypt.hashSync(process.env.ADMIN_PASSWORD, 8),
-    "address": {
-      "street": "req.body.address.street",
-      "city": "req.body.address.city",
-      "state": "req.body.address.state",
-      "zip": "req.body.address.zip"
-    },
+    "roleId": ROLE_LIST.ADMIN,
     "person": {
-      "name": "Rodrigo Sebastián",
-      "number": "7271190177"
+      "name": "Israel Sanchez",
+      "number": "7777777777",
+      "addressId": address.id
     }
-  })
+
+  }, {
+    include: [ Person ]
+  });
 
   console.log("Database seeded successfully");
   process.exit(0);

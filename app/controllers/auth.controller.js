@@ -16,7 +16,7 @@ module.exports.signin = async (req, res) => {
 
       const response = await User.scope(["defaultScope","withPassword"]).findOne({
         where: {
-          [Op.or]: [{username: req.body.username}, {email: req.body.username}]
+          [Op.or]: [{username: req.body.username || ""}, {email: req.body.email || ""}]
         },
         transaction: t
       });
