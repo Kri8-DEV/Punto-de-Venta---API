@@ -63,6 +63,7 @@ const swaggerDocument = mergeYaml(['./swagger/swagger.yml'].concat(files.map(fil
   app.use(function(req, res, next) {
     res.header(
       "Access-Control-Allow-Headers",
+      "Access-Control-Allow-Credentials",
       "x-access-token, Origin, Content-Type, Accept"
     );
     next();
