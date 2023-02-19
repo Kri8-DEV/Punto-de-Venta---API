@@ -1,23 +1,8 @@
-module.exports = (sequelize, Sequelize) => {
-  const Address = sequelize.define("addresses", {
-    id: {
-      type: Sequelize.INTEGER,
-      primaryKey: true,
-      autoIncrement: true
-    },
-    street: {
-      type: Sequelize.STRING
-    },
-    city: {
-      type: Sequelize.STRING
-    },
-    state: {
-      type: Sequelize.STRING
-    },
-    zip: {
-      type: Sequelize.STRING
-    }
-  });
+module.exports = (db) => {
+  // Relationships
 
-  return Address;
-};
+  // Scopes
+  db.address.addScope('defaultScope', {
+    attributes: { exclude: ['createdAt', 'updatedAt'] },
+  }, { override: true });
+}

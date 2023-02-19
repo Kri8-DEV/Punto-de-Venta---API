@@ -1,14 +1,13 @@
-module.exports = (sequelize, Sequelize) => {
-  const Role = sequelize.define("roles", {
-    id: {
-      type: Sequelize.INTEGER,
-      primaryKey: true,
-      required: true,
-    },
-    name: {
-      type: Sequelize.STRING
-    }
-  });
+module.exports = (db) => {
+  // Relationships
 
-  return Role;
-};
+  // Scopes
+  db.role.addScope('defaultScope', {
+    order: [
+      ['createdAt', 'DESC']
+    ],
+    attributes: {
+      exclude: ["createdAt", "updatedAt"]
+    }
+  }, { override: true });
+}

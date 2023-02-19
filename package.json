@@ -1,11 +1,12 @@
 {
   "name": "kri-api",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Generic API made with NodeJS, Express and MySQL to manage a store",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "SET NODE_ENV=test&& mocha --exit --recursive --timeout 10000",
     "dev": "nodemon server.js",
+    "sync_db": "SET NODE_ENV=development&& SET DB_SYNC=true&& npm run start",
     "start": "node server.js"
   },
   "repository": {
@@ -25,14 +26,20 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "i18n-node-yaml": "^1.0.4",
     "jsonwebtoken": "^9.0.0",
-    "merge-yaml": "^1.1.0",
     "morgan": "^1.10.0",
     "mysql2": "^3.0.1",
     "nodemon": "^2.0.20",
     "sequelize": "^6.28.0",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^4.6.0",
     "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "chai-http": "^4.3.0",
+    "merge-yaml": "^1.1.0",
+    "mocha": "^10.2.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.1"
   }
 }

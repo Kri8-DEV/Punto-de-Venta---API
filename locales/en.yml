@@ -1,0 +1,19 @@
+welcome: Welcome to the KRI Eight API
+error:
+  model:
+    user:
+      not_found: User not found
+      invalid_password: Invalid password
+    auth:
+      refresh_token:
+        invalid: Invalid refresh token
+        expired: Refresh token expired. Please log in again.
+        missing: Missing refresh token
+messages:
+  model:
+    user:
+      login: User logged in successfully
+    auth:
+      refresh_token:
+        refreshed: Refresh token refreshed successfully
+      logout: User logged out successfully
