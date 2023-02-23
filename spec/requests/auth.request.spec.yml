@@ -36,12 +36,12 @@ paths:
         - Authentication
       description: Refresh JWT token
       parameters:
-        - name: refreshtoken
-          in: cookie
-          description: Refresh token
+        - name: userId
+          in: body
+          description: User ID
           required: true
           schema:
-            type: string
+            type: UUID
       responses:
         '200':
           description: Token refreshed
@@ -83,12 +83,12 @@ paths:
         - Authentication
       description: Logout to the application
       parameters:
-        - name: refreshtoken
-          in: cookie
-          description: Refresh token
+        - name: userId
+          in: body
+          description: User ID
           required: true
           schema:
-            type: string
+            type: UUID
       responses:
         '200':
           description: User logged out
