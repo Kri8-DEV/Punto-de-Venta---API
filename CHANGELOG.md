@@ -1,5 +1,8 @@
 # KRI Api v1.5.0
 
+## 2023-02-23
+- RS [ADD] The endpoints /api/auth/refreshtoken and /api/auth/logout now receive the user id in the body
+
 ## 2023-02-19
 - RS [ADD] Added mocha and chai dependencies for the tests
 - RS [ADD] Added test folder with the first test
