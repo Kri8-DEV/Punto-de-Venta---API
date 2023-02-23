@@ -9,6 +9,8 @@ error:
         invalid: "Token de refresco inválido"
         expired: "Token de refresco expirado. Inicie sesión nuevamente."
         missing: "Falta token de refresco"
+      user:
+        missing: "Falta usuario"
 messages:
   model:
     user:

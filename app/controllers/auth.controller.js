@@ -44,10 +44,6 @@ module.exports.signin = async (req, res) => {
 
     delete user.dataValues.password;
 
-    res.cookie("refreshToken", refreshToken, { httpOnly: true, sameSite: "None",
-    // TODO: Change to true when in production
-    // secure: True,
-    maxAge: config.jwtRefreshExpiration * 1000 });
     res.status(200).send({ message: req.t("messages.model.user.login"), data: { token: token, user: user } });
 
   } catch (error) {
@@ -58,16 +54,13 @@ module.exports.signin = async (req, res) => {
 
 // Refresh token
 module.exports.refreshToken = async (req, res) => {
-  const cookies = req.cookies;
-
-  if (!cookies?.refreshToken) return res.status(403).send({ message: req.t("error.model.auth.refresh_token.missing") });
-
-  const requestToken = cookies.refreshToken;
-
   try {
+    const userId = req.body.userId;
+    if (!userId) return res.status(403).send({ message: req.t("error.model.auth.user.missing") });
+
     let refreshToken = await RefreshToken.findOne({
       where: {
-        token: requestToken
+        userId: userId
       }
     });
 
@@ -97,21 +90,18 @@ module.exports.refreshToken = async (req, res) => {
 // Logout
 module.exports.logout = async (req, res) => {
   try {
-    const cookies = req.cookies;
-
-    if (!cookies?.refreshToken) return res.status(403).send({ message: req.t("error.model.auth.refresh_token.missing") });
-
-    const requestToken = cookies.refreshToken;
+    const userId = req.body.userId;
+    if (!userId) return res.status(403).send({ message: req.t("error.model.auth.user.missing") });
 
     let refreshToken = await RefreshToken.findOne({
       where: {
-        token: requestToken
+        userId: userId
       }
     });
 
     if (!refreshToken) return res.status(403).send({ message: req.t("error.model.auth.refresh_token.invalid") });
 
-    RefreshToken.destroy({ where: { id: refreshToken.id } });
+    RefreshToken.destroy({ where: { userId: refreshToken.userId } });
 
     res.clearCookie("refreshToken");
     res.status(200).send({ message: req.t("messages.model.auth.logout") });
