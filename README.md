@@ -1,6 +1,6 @@
 # KRI Api
 Generic API made with NodeJS, Express and MySQL
-Version: 1.5.0
+Version: 1.5.1
 Autor: KRI Eight Team
 
 ## Installation

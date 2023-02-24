@@ -1,6 +1,6 @@
 {
   "name": "kri-api",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Generic API made with NodeJS, Express and MySQL to manage a store",
   "main": "server.js",
   "scripts": {
@@ -21,7 +21,7 @@
   "homepage": "https://github.com/Kri8-DEV/kri-api#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "body-parser": "^1.20.1",
+    "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
@@ -29,9 +29,9 @@
     "i18n-node-yaml": "^1.0.4",
     "jsonwebtoken": "^9.0.0",
     "morgan": "^1.10.0",
-    "mysql2": "^3.0.1",
+    "mysql2": "^3.1.2",
     "nodemon": "^2.0.20",
-    "sequelize": "^6.28.0",
+    "sequelize": "^6.28.2",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
