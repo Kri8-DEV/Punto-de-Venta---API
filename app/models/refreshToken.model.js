@@ -1,12 +1,16 @@
-module.exports = (db) => {
+module.exports = async (db) =>{
   // Relationships
-  db.user.hasOne(db.refreshToken, {
-    foreignKey: 'userId',
-    targetKey: 'id'
+  db.user.hasOne(db.refreshToken,{
+    foreignKey: {
+      name: 'userId',
+      targetKey: 'UUID'
+    },
   });
-  db.refreshToken.belongsTo(db.user, {
-    foreignKey: 'userId',
-    targetKey: 'id'
+  db.refreshToken.belongsTo(db.user,{
+    foreignKey: {
+      name: 'userId',
+      targetKey: 'UUID'
+    }
   });
 
   // Scopes

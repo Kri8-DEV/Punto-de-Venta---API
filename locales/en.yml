@@ -9,6 +9,8 @@ error:
         invalid: Invalid refresh token
         expired: Refresh token expired. Please log in again.
         missing: Missing refresh token
+      user:
+        missing: Missing user
 messages:
   model:
     user:

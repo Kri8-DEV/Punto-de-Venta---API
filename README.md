@@ -1,6 +1,6 @@
 # KRI Api
 Generic API made with NodeJS, Express and MySQL
-Version: 1.5.0
+Version: 1.5.1
 Autor: KRI Eight Team
 
 ## Installation
@@ -37,7 +37,15 @@ Install the next dependencies for the tests:
 
 ## Usage
 Run the next command to start the server:
-```npm start```
+- ```npm start```
 
-Run with nodemon:
-```npm run dev```
+Sync the database:
+- ```npm run sync_db```
+
+Run with nodemon for development:
+- ```npm run dev```
+
+Run the tests:
+- ```npm run test```
+
+- ```npm run test ./test/your_test.js```
