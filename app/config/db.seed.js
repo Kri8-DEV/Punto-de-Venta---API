@@ -53,6 +53,20 @@ module.exports.initial = async function (db) {
     include: [ Person ]
   });
 
+  await User.create({
+    "username": "Rodrigo KRI",
+    "email": "rodrigo@krieight.com",
+    "password": bcrypt.hashSync(process.env.ADMIN_PASSWORD, 8),
+    "roleId": ROLE_LIST.USER,
+    "person": {
+      "name": "Rodrigo De la Rosa",
+      "number": "7777777777",
+      "addressId": address.id
+    }
+  }, {
+    include: [ Person ]
+  });
+
   console.log("Database seeded successfully");
   process.exit(0);
 }

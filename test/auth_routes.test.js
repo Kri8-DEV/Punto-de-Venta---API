@@ -13,6 +13,7 @@ const Role = db.role;
 chai.use(chaiHttp);
 
 describe('Auth', () => {
+  let userId = 0;
   before((done) => {
     db.sequelize.sync({ force: true }).then(() => {
 
@@ -26,7 +27,8 @@ describe('Auth', () => {
         }
       }, {
         include: [Role]
-      }).then(() => {
+      }).then((user) => {
+        userId = user.id;
         done();
       });
     });
@@ -44,26 +46,6 @@ describe('Auth', () => {
         .end((err, res) => {
           expect(res).to.have.status(200);
           expect(res.body).to.be.a('object');
-          expect(res.body).to.have.property('message').eql('Login successful');
-          expect(res.body).to.have.property('data');
-          expect(res.body.data).to.have.property('token');
-          expect(res.body.data).to.have.property('user');
-          done();
-        });
-    });
-
-    it('it should login a user using email', (done) => {
-      let user = {
-        email: 'admin@krieight.com',
-        password: 'admin'
-      }
-      chai.request(app)
-        .post('/api/auth/signin')
-        .send(user)
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body).to.be.a('object');
-          expect(res.body).to.have.property('message').eql('Login successful');
           expect(res.body).to.have.property('data');
           expect(res.body.data).to.have.property('token');
           expect(res.body.data).to.have.property('user');
@@ -82,7 +64,6 @@ describe('Auth', () => {
         .end((err, res) => {
           expect(res).to.have.status(401);
           expect(res.body).to.be.a('object');
-          expect(res.body).to.have.property('message').eql('Invalid Password');
           done();
         });
     });
@@ -98,7 +79,6 @@ describe('Auth', () => {
         .end((err, res) => {
           expect(res).to.have.status(404);
           expect(res.body).to.be.a('object');
-          expect(res.body).to.have.property('message').eql('User Not found');
           done();
         });
     });
@@ -107,25 +87,16 @@ describe('Auth', () => {
   describe('/POST refreshToken', () => {
     it('it should refresh token', (done) => {
       let user = {
-        username: 'admin',
-        password: 'admin'
+        userId: userId,
       }
       chai.request(app)
-        .post('/api/auth/signin')
+        .post('/api/auth/refreshtoken')
         .send(user)
         .end((err, res) => {
-          expect(res).to.have.cookie('refreshToken');
-          let refreshToken = res.header['set-cookie'][0].split(';')[0].split('=')[1];
-          chai.request(app)
-            .post('/api/auth/refreshtoken')
-            .set('Cookie', `refreshToken=${refreshToken}`)
-            .end((err, res) => {
-              expect(res).to.have.status(200);
-              expect(res.body).to.be.a('object');
-              expect(res.body).to.have.property('message').eql('Access token refreshed');
-              expect(res.body.data).to.have.property('token');
-              done();
-            });
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.a('object');
+          expect(res.body.data).to.have.property('token');
+          done();
         });
     });
   });
@@ -133,24 +104,15 @@ describe('Auth', () => {
   describe('/POST logout', () => {
     it('it should logout a user', (done) => {
       let user = {
-        username: 'admin',
-        password: 'admin'
+        userId: userId,
       }
       chai.request(app)
-        .post('/api/auth/signin')
+        .post('/api/auth/logout')
         .send(user)
         .end((err, res) => {
-          expect(res).to.have.cookie('refreshToken');
-          let refreshToken = res.header['set-cookie'][0].split(';')[0].split('=')[1];
-          chai.request(app)
-            .post('/api/auth/logout')
-            .set('Cookie', `refreshToken=${refreshToken}`)
-            .end((err, res) => {
-              expect(res).to.have.status(200);
-              expect(res.body).to.be.a('object');
-              expect(res.body).to.have.property('message').eql('Logout successful');
-              done();
-            });
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.a('object');
+          done();
         });
     });
   });

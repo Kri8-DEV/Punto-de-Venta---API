@@ -36,7 +36,7 @@ module.exports = (sequelize, Sequelize) => {
     } catch(error) {
       error.status = error.status || 500;
       if (error.name === "SequelizeUniqueConstraintError")
-        error.message = "The user is already logged in";
+        error.message = "SequelizeUniqueConstraintError";
       throw { message: error.message, status: error.status };
     }
   };

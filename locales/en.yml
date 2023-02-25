@@ -11,6 +11,8 @@ error:
         missing: Missing refresh token
       user:
         missing: Missing user
+      login:
+        already_logged_in: User already logged in
 messages:
   model:
     user:
