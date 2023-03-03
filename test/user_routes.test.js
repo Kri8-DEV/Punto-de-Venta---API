@@ -105,7 +105,7 @@ describe('Auth', () => {
   describe('/POST /api/user', () => {
     it('it should create a user', (done) => {
       chai.request(app)
-        .post('/api/user/create')
+        .post('/api/user/')
         .set('Authorization', 'Bearer ' + authToken)
         .send({
           username: 'user 2',
