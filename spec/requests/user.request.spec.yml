@@ -32,7 +32,40 @@ paths:
             application/json:
               schema:
                 $ref: '#/definitions/error'
-  /api/users/:id:
+  /api/user/:
+    post:
+      tags:
+        - User
+      description: Create a new user
+      security:
+      - Bearer: []
+      parameters:
+        - name: credentials
+          in: body
+          description: User information (ID is not required)
+          required: true
+          schema:
+            $ref: '#/definitions/user'
+      responses:
+        '200':
+          description: User registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/signUp'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+  /api/user/:id:
     get:
       tags:
         - User
@@ -71,29 +104,50 @@ paths:
             application/json:
               schema:
                 $ref: '#/definitions/error'
-  /api/user/create:
-    post:
+    put:
       tags:
         - User
-      description: Create a new user
+      description: Update a user
       security:
-      - Bearer: []
+        - Bearer: []
       parameters:
-        - name: credentials
+        - name: id
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: UUID
+        - name: user
           in: body
-          description: User information (ID is not required)
+          description: User properties
           required: true
           schema:
             $ref: '#/definitions/user'
       responses:
         '200':
-          description: User registered
+          description: User updated
           content:
             application/json:
               schema:
-                $ref: '#/definitions/signUp'
-        '400':
-          description: Bad Request
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User was updated successfully
+                    description: User was updated successfully
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        $ref: '#/definitions/user'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '404':
+          description: Not Found
           content:
             application/json:
               schema:
@@ -104,7 +158,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/definitions/error'
-  /api/user/:id:
     delete:
       tags:
         - User
@@ -174,61 +227,6 @@ paths:
                     type: string
                     example: User was deleted successfully
                     description: User was deleted successfully
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/definitions/error'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/definitions/error'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/definitions/error'
-  /api/user/update/:id:
-    put:
-      tags:
-        - User
-      description: Update a user
-      security:
-        - Bearer: []
-      parameters:
-        - name: id
-          in: path
-          description: User ID
-          required: true
-          schema:
-            type: UUID
-        - name: user
-          in: body
-          description: User properties
-          required: true
-          schema:
-            $ref: '#/definitions/user'
-      responses:
-        '200':
-          description: User updated
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: User was updated successfully
-                    description: User was updated successfully
-                  data:
-                    type: object
-                    properties:
-                      user:
-                        $ref: '#/definitions/user'
         '401':
           description: Unauthorized
           content:

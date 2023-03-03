@@ -11,6 +11,8 @@ error:
         missing: "Falta token de refresco"
       user:
         missing: "Falta usuario"
+      login:
+        already_logged_in: "El usuario ya ha iniciado sesión"
 messages:
   model:
     user:

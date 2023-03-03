@@ -194,7 +194,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/definitions/error'
-  /api/product/create:
+  /api/product/:
     post:
       tags:
         - Product

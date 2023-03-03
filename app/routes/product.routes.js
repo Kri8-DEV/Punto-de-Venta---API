@@ -18,7 +18,7 @@ module.exports = function(app) {
   controller.findOne);
 
   // Create a new product
-  app.post('/api/product/create',
+  app.post('/api/product/',
   verifyRoles([ROLE.SUPERADMIN, ROLE.ADMIN]),
   controller.create);
 

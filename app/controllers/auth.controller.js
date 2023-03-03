@@ -48,6 +48,10 @@ module.exports.signin = async (req, res) => {
 
   } catch (error) {
     error.status = error.status || 500;
+    if (error.message.includes("SequelizeUniqueConstraintError")) {
+      error.status = 400;
+      error.message = req.t("error.model.auth.login.already_logged_in");
+    }
     res.status(error.status).send({ message: error.message });
   };
 };
