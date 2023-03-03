@@ -1,4 +1,4 @@
-# KRI Api v1.5.1
+# KRI Api v1.5.2
 
 ## 2023-02-23
 - RS [FIX] The endpoints /api/auth/refreshtoken and /api/auth/logout now receive the user id in the body
