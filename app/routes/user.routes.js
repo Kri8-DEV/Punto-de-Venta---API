@@ -12,7 +12,7 @@ module.exports = function (app) {
     controller.findAll);
 
   // Create a new User
-  app.post('/api/user/create',
+  app.post('/api/user/',
     verifyRoles(ROLE.SUPERADMIN, ROLE.ADMIN),
     controller.create);
 
