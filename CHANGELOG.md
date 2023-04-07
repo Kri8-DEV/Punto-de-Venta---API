@@ -1,5 +1,8 @@
 # KRI Api v1.5.2
 
+## 2023-04-06
+- RS [ADD] Se agregaron los modelos y schemas de Sales, SalesDetails y Customers, para poder realizar las operaciones de ventas
+
 ## 2023-02-23
 - RS [FIX] The endpoints /api/auth/refreshtoken and /api/auth/logout now receive the user id in the body
 
