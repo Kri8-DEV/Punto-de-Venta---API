@@ -10,7 +10,9 @@ module.exports = (sequelize, Sequelize) => {
       foreignKey: true
     },
     token: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(191),
+      allowNull: false,
+      primaryKey: true
     },
     expires: {
       type: Sequelize.DATE,
