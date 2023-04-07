@@ -83,10 +83,6 @@ definitions:
       data:
         type: object
         properties:
-          token:
-            type: string
-            example: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
-            description: JWT token
           user:
             $ref: "#/definitions/user"
   signUp:
@@ -252,3 +248,8 @@ definitions:
     type: array
     items:
       $ref: "#/definitions/sale"
+  token:
+    type: string
+    example: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+    description: JWT token
+
