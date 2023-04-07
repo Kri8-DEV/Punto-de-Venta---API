@@ -1,6 +1,13 @@
 welcome: "Bienvenido a la API de KRI Eight"
 error:
   model:
+    customer:
+      created: "Error al crear el cliente"
+      updated: "Error al actualizar el cliente"
+      deleted: "Error al eliminar el cliente"
+      not_found: "Cliente no encontrado"
+      person_required: "La persona es requerida"
+      address_required: "La dirección es requerida"
     user:
       not_found: "Usuario no encontrado"
       invalid_password: "Contraseña inválida"
@@ -36,6 +43,10 @@ error:
       not_found: "Venta no encontrada"
 messages:
   model:
+    customer:
+      created: "Cliente creado correctamente"
+      updated: "Cliente actualizado correctamente"
+      found: "Cliente encontrado correctamente"
     user:
       login: "El usuario ha iniciado sesión correctamente"
       created: "Usuario creado correctamente"
