@@ -36,6 +36,9 @@ db.product = require('../db/product.schema')(sequelize, Sequelize);
 db.session = require('../db/session.schema.js')(sequelize, Sequelize);
 db.store = require('../db/store.schema')(sequelize, Sequelize);
 db.stock = require('../db/stock.schema')(sequelize, Sequelize);
+db.customer = require('../db/customer.schema')(sequelize, Sequelize);
+db.sale = require('../db/sale.schema')(sequelize, Sequelize);
+db.saleDetail = require('../db/sale_detail.schema')(sequelize, Sequelize);
 
 // Models
 require('./user.model.js')(db);
@@ -46,5 +49,8 @@ require('./product.model.js')(db);
 require('./session.model.js')(db);
 require('./store.model.js')(db);
 require('./stock.model.js')(db);
+require('./customer.model.js')(db);
+require('./sale.model.js')(db);
+require('./sale_detail.model.js')(db);
 
 module.exports = db;
