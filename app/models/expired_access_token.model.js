@@ -1,12 +1,12 @@
-module.exports = async (db) =>{
+module.exports = async (db) => {
   // Relationships
-  db.user.hasOne(db.session,{
+  db.user.hasOne(db.expiredAccessToken,{
     foreignKey: {
       name: 'userId',
       targetKey: 'UUID'
     },
   });
-  db.session.belongsTo(db.user,{
+  db.expiredAccessToken.belongsTo(db.user,{
     foreignKey: {
       name: 'userId',
       targetKey: 'UUID'

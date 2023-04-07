@@ -20,10 +20,11 @@ error:
         invalid: "Token de refresco inválido"
         expired: "Token de refresco expirado. Inicie sesión nuevamente."
         missing: "Falta token de refresco"
+        invalid_session: "Sesión inválida. Inicie sesión nuevamente."
       user:
         missing: "Falta usuario"
       login:
-        already_logged_in: "El usuario ya ha iniciado sesión"
+        already_logged_in: "El usuario ya cuenta con una sesión iniciada"
       jwt:
         expired: "Sin autorización. Token expirado"
         invalid: "Sin autorización. Token inválido"

@@ -7,7 +7,8 @@ var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
 const User = db.user;
-const Session = db.session;
+const RefreshToken = db.refreshToken;
+const ExpiredAccessToken = db.expiredAccessToken;
 
 // Sign in
 module.exports.signin = async (req, res) => {
@@ -33,18 +34,20 @@ module.exports.signin = async (req, res) => {
 
     if (!passwordIsValid) return res.status(401).send({ message: req.t("error.model.user.invalid_password") });
 
+    let refreshToken = await RefreshToken.createToken(user);
+
     const token = jwt.sign({
       id: user.dataValues.id,
       role: user.dataValues.role.id,
+      rTId: refreshToken.id
     }, config.ACCESS_TOKEN_SECRET, {
       expiresIn: config.jwtExpiration
     });
 
-    let session = await Session.createToken(user);
-
     delete user.dataValues.password;
 
-    res.status(200).send({ message: req.t("messages.model.user.login"), data: { token: token, user: user } });
+    res.setHeader("Authorization", token);
+    return res.status(200).send({ message: req.t("messages.model.user.login"), data: { user: user } });
 
   } catch (error) {
     error.status = error.status || 500;
@@ -59,32 +62,55 @@ module.exports.signin = async (req, res) => {
 // Refresh token
 module.exports.refreshToken = async (req, res) => {
   try {
-    const userId = req.body.userId;
-    if (!userId) return res.status(403).send({ message: req.t("error.model.auth.user.missing") });
+    const _token = await sequelize.transaction(async (t) => {
+      let token = req.headers["authorization"]
 
-    let session = await Session.findOne({
-      where: {
-        userId: userId
+      if(!token?.startsWith("Bearer ")) throw { message: req.t("error.model.auth.jwt.missing"), status: 401 }
+
+      token = token.replace('Bearer ', '');
+      const decoded = jwt.verify(token, config.ACCESS_TOKEN_SECRET, { ignoreExpiration: true });
+
+      if (RefreshToken.verifyExpiration(decoded)) {
+        let refreshToken = await RefreshToken.findOne({
+          where: {
+            userId: decoded.id
+          }
+        });
+
+        if (!refreshToken) throw { message: req.t("error.model.auth.refresh_token.invalid_session"), status: 403}
+
+        if (refreshToken.expires.getTime() < new Date().getTime()) {
+          RefreshToken.destroy({ where: { id: refreshToken.id } });
+          throw { message: req.t("error.model.auth.refresh_token.expired"), status: 403}
+        }
+
+        const expiredToken = await ExpiredAccessToken.findOne({
+          where: {
+            userId: decoded.id,
+            token: token
+          }
+        });
+
+        if (expiredToken) throw { message: req.t("error.model.auth.refresh_token.invalid"), status: 403}
+
+        await ExpiredAccessToken.create({
+          token: token,
+          userId: decoded.id,
+        }, { transaction: t });
+
+        token = jwt.sign({
+          id: decoded.id,
+          role: decoded.role,
+        }, config.ACCESS_TOKEN_SECRET, {
+          expiresIn: config.jwtExpiration
+        });
       }
+
+      return token
     });
 
-    if (!session) return res.status(403).send({ message: req.t("error.model.auth.refresh_token.invalid") });
-
-    if(Session.verifyExpiration(session)) {
-      Session.destroy({ where: { id: session.id } });
-
-      return res.status(403).send({ message: req.t("error.model.auth.refresh_token.expired") });
-    }
-
-    const user = await session.getUser();
-    let newAccessToken = jwt.sign({
-      id: user.id,
-      role: user.role.id,
-    }, config.ACCESS_TOKEN_SECRET, {
-      expiresIn: config.jwtExpiration
-    });
-
-    return res.status(200).send({ message: req.t("messages.model.auth.refresh_token.refreshed"), data: { token: newAccessToken } });
+    res.setHeader("Authorization", _token);
+    return res.status(200).send({ message: req.t("messages.model.auth.refresh_token.refreshed") });
   } catch (error) {
     error.status = error.status || 500;
     res.status(error.status).send({ message: error.message });
@@ -94,20 +120,28 @@ module.exports.refreshToken = async (req, res) => {
 // Logout
 module.exports.logout = async (req, res) => {
   try {
-    const userId = req.body.userId;
-    if (!userId) return res.status(403).send({ message: req.t("error.model.auth.user.missing") });
+    let token = req.headers["authorization"]
 
-    let session = await Session.findOne({
+    if(!token?.startsWith("Bearer ")) throw { message: req.t("error.model.auth.jwt.missing"), status: 401 }
+
+    token = token.replace('Bearer ', '');
+    const decoded = jwt.verify(token, config.ACCESS_TOKEN_SECRET, (err, decoded) => {
+      if(err) throw { message: req.t("error.model.auth.jwt.invalid"), status: 403 };
+      return decoded;
+    });
+
+    let refreshToken = await RefreshToken.findOne({
       where: {
-        userId: userId
+        userId: decoded.id,
+        id: decoded.rTId
       }
     });
 
-    if (!session) return res.status(403).send({ message: req.t("error.model.auth.refresh_token.invalid") });
+    if (!refreshToken) throw { message: req.t("error.model.auth.refresh_token.invalid"), status: 403}
 
-    Session.destroy({ where: { userId: session.userId } });
+    RefreshToken.destroy({ where: { id: refreshToken.id } });
 
-    res.clearCookie("session");
+    res.clearCookie("refreshToken");
     res.status(200).send({ message: req.t("messages.model.auth.logout") });
   }
   catch (error) {
