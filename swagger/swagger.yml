@@ -53,6 +53,23 @@ definitions:
         type: string
         example: 123456
         description: User password
+  customer:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+        description: Internal customer ID
+      name:
+        type: string
+        example: Kri Eight
+        description: Customer name
+      number:
+        type: string
+        example: 7441234567
+        description: Customer cellphone number
+      address:
+        $ref: '#/definitions/address'
   error:
     type: object
     properties:
@@ -184,3 +201,58 @@ definitions:
         type: boolean
         example: true
         description: Product active status
+  sale_details:
+    type: array
+    properties:
+      product:
+        $ref: '#/definitions/product'
+      quantity:
+        type: integer
+        example: 1
+        description: Product quantity
+      price:
+        type: number
+        format: currency
+        example: 100
+        description: Product price
+  store:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+        description: Internal store ID
+      name:
+        type: string
+        example: Store 1
+        description: Store name
+      address:
+        $ref: '#/definitions/address'
+      user:
+        $ref: '#/definitions/user'
+  sale:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+        description: Internal sale ID
+      store:
+        $ref: '#/definitions/store'
+      customer:
+        $ref: '#/definitions/customer'
+      date:
+        type: string
+        example: 2023-01-28T03:37:33.114Z
+        description: Sale date
+      total:
+        type: number
+        format: currency
+        example: 100
+        description: Sale total
+      details:
+        $ref: '#/definitions/sale_details'
+  sales:
+    type: array
+    items:
+      $ref: '#/definitions/sale'

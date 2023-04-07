@@ -1,0 +1,123 @@
+paths:
+  /api/sales:
+    get:
+      tags:
+        - Sale
+      description: Get all sales
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Sales retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/sales'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+  /api/sale/:id:
+    get:
+      tags:
+        - Sale
+      description: Get a specific sale by ID
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          description: Sale ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sale retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/sale'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+  /api/sale/new:
+    post:
+      tags:
+        - Sale
+      description: Create a new sale
+      security:
+        - Bearer: []
+      requestBody:
+        description: Sale object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/sale'
+      responses:
+        '201':
+          description: Sale created
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/sale'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
