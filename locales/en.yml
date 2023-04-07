@@ -1,23 +1,58 @@
-welcome: Welcome to the KRI Eight API
+welcome: "Welcome to the KRI Eight API"
 error:
   model:
     user:
-      not_found: User not found
-      invalid_password: Invalid password
+      not_found: "User not found"
+      invalid_password: "Invalid password"
+      password_required: "Password is required"
+      address_required: "Address is required"
+      person_required: "Person is required"
+      cannot_update: "You are not authorized to update this user"
     auth:
       refresh_token:
-        invalid: Invalid refresh token
-        expired: Refresh token expired. Please log in again.
-        missing: Missing refresh token
+        invalid: "Invalid refresh token"
+        expired: "Refresh token expired. Please log in again."
+        missing: "Refresh token is missing"
       user:
-        missing: Missing user
+        missing: "User is missing"
       login:
-        already_logged_in: User already logged in
+        already_logged_in: "User is already logged in"
+      jwt:
+        expired: "Unauthorized. Token has expired"
+        invalid: "Unauthorized. Invalid token"
+        missing: "Unauthorized. Token not found"
+      user_level:
+        role_invalid: "Invalid or not found role"
+        role_insufficient: "Forbidden. You do not have the required access level"
+    product:
+      created: "Error creating product"
+      updated: "Error updating product"
+      deleted: "Error deleting product"
+      not_found: "Product not found"
+    sale:
+      created: "Error creating sale"
+      updated: "Error updating sale"
+      deleted: "Error deleting sale"
+      not_found: "Sale not found"
 messages:
   model:
     user:
-      login: User logged in successfully
+      login: "User logged in successfully"
+      created: "User created successfully"
+      updated: "User updated successfully"
+      deleted: "User deleted successfully"
+      deactivated: "User deactivated successfully"
+      reactivated: "User reactivated successfully"
     auth:
       refresh_token:
-        refreshed: Refresh token refreshed successfully
-      logout: User logged out successfully
+        refreshed: "Refresh token updated successfully"
+        logout: "User logged out successfully"
+    product:
+      created: "Product created successfully"
+      updated: "Product updated successfully"
+      deleted: "Product deleted successfully"
+      deactivated: "Product deactivated successfully"
+    sale:
+      created: "Sale created successfully"
+      updated: "Sale updated successfully"
+      deleted: "Sale deleted successfully"

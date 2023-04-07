@@ -38,7 +38,7 @@ module.exports.findOne = async (req, res) => {
     });
 
     if (!user)
-      throw { message: "User not found", status: 404 };
+      throw { message: req.t("error.model.user.not_found"), status: 404 };
 
     res.status(200).send(user);
   } catch (error) {
@@ -59,13 +59,13 @@ module.exports.create = async (req, res) => {
       });
 
       if (req.body.password == null || req.body.password == "")
-        throw { message: "Password is required", status: 400 };
+        throw { message: req.t("error.model.user.password_required"), status: 400 };
 
       if (req.body.address == null)
-        throw { message: "Address is required", status: 400 };
+        throw { message: req.t("error.model.user.address_required"), status: 400 };
 
       if (req.body.person == null)
-        throw { message: "Person is required", status: 400 };
+        throw { message: req.t("error.model.user.person_required"), status: 400 };
 
       const address = await Address.create({
         street: req.body.address.street,
@@ -100,7 +100,7 @@ module.exports.create = async (req, res) => {
       });
     });
 
-    res.send({ message: "User was created successfully", data: { user: result } });
+    res.send({ message: req.t("messages.model.user.created"), data: { user: result } });
   } catch (error) {
     error.status = error.status || 500;
     res.status(error.status).send({ message: error.message });
@@ -117,13 +117,13 @@ module.exports.deactivate = async (req, res) => {
     });
 
     if (!user)
-      throw { message: "User not found", status: 404 };
+      throw { message: req.t("error.model.user.not_found"), status: 404 };
 
     await user.update({
       active: false
     });
 
-    res.send({ message: "User was deactivated successfully" });
+    res.send({ message: req.t("messages.model.user.deactivated") });
   } catch (error) {
     error.status = error.status || 500;
     res.status(error.status).send({ message: error.message });
@@ -141,11 +141,11 @@ module.exports.delete = async (req, res) => {
     });
 
     if (!user)
-      throw { message: "User not found", status: 404 };
+      throw { message: req.t("error.model.user.not_found"), status: 404 };
 
     await user.destroy();
 
-    res.send({ message: "User was deleted successfully" });
+    res.send({ message: req.t("messages.model.user.deleted") });
   } catch (error) {
     error.status = error.status || 500;
     res.status(error.status).send({ message: error.message });
@@ -168,11 +168,11 @@ module.exports.update = async (req, res) => {
       }
     });
 
-    if (!user) throw { message: "User not found", status: 404 };
+    if (!user) throw { message: req.t("error.model.user.not_found"), status: 404 };
 
     const result = await sequelize.transaction(async (t) => {
       if ([ROLE.ADMIN, ROLE.SUPERADMIN].includes(user.role.id))
-        throw { message: "You are not authorized to update user", status: 401 };
+        throw { message: req.t("error.model.user.cannot_update"), status: 400 };
 
       const address = await user.person.address.update({
         street: req.body.address ? req.body.address.street : user.person.address.street,
@@ -206,7 +206,7 @@ module.exports.update = async (req, res) => {
       });
     });
 
-    res.send({ message: "User was updated successfully", data: { user: result } });
+    res.send({ message: req.t("messages.model.user.updated"), data: { user: result } });
   } catch (error) {
     error.status = error.status || 500;
     res.status(error.status).send({ message: error.message });
@@ -224,13 +224,13 @@ module.exports.reactivate = async (req, res) => {
     });
 
     if (!user)
-      throw { message: "User not found", status: 404 };
+      throw { message: req.t("error.model.user.not_found"), status: 404 };
 
     await user.update({
       active: true
     });
 
-    res.send({ message: "User was reactivated successfully", data: { user: user } });
+    res.send({ message: req.t("messages.model.user.reactivated") });
   } catch (error) {
     error.status = error.status || 500;
     res.status(error.status).send({ message: error.message });
