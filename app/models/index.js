@@ -33,7 +33,7 @@ db.role = require('../db/role.schema')(sequelize, Sequelize);
 db.address = require('../db/address.schema')(sequelize, Sequelize);
 db.person = require('../db/person.schema')(sequelize, Sequelize);
 db.product = require('../db/product.schema')(sequelize, Sequelize);
-db.refreshToken = require('../db/refreshToken.schema')(sequelize, Sequelize);
+db.session = require('../db/session.schema.js')(sequelize, Sequelize);
 db.store = require('../db/store.schema')(sequelize, Sequelize);
 db.stock = require('../db/stock.schema')(sequelize, Sequelize);
 
@@ -43,7 +43,7 @@ require('./role.model.js')(db);
 require('./address.model.js')(db);
 require('./person.model.js')(db);
 require('./product.model.js')(db);
-require('./refreshToken.model.js')(db);
+require('./session.model.js')(db);
 require('./store.model.js')(db);
 require('./stock.model.js')(db);
 

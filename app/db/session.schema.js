@@ -2,7 +2,7 @@ const config = require("../config/auth.config");
 const { v4: uuidv4 } = require("uuid");
 
 module.exports = (sequelize, Sequelize) => {
-  const RegreshToken = sequelize.define("refreshToken", {
+  const Session = sequelize.define("sessions", {
     userId:{
       type: Sequelize.UUID,
       allowNull: false,
@@ -18,7 +18,7 @@ module.exports = (sequelize, Sequelize) => {
   });
 
 
-  RegreshToken.createToken = async function(user) {
+  Session.createToken = async function(user) {
     try {
       let expiredAt = new Date();
 
@@ -26,13 +26,13 @@ module.exports = (sequelize, Sequelize) => {
 
       let _token = uuidv4();
 
-      let refreshToken = await this.create({
+      let session = await this.create({
         token: _token,
         userId: user.id,
         expires: expiredAt.getTime(),
       });
 
-      return refreshToken.token;
+      return session.token;
     } catch(error) {
       error.status = error.status || 500;
       if (error.name === "SequelizeUniqueConstraintError")
@@ -41,9 +41,9 @@ module.exports = (sequelize, Sequelize) => {
     }
   };
 
-  RegreshToken.verifyExpiration = (token) => {
+  Session.verifyExpiration = (token) => {
     return token.expires.getTime() < new Date().getTime();
   };
 
-  return RegreshToken;
+  return Session;
 };

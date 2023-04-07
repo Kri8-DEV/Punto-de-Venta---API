@@ -7,7 +7,7 @@ var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
 const User = db.user;
-const RefreshToken = db.refreshToken;
+const Session = db.session;
 
 // Sign in
 module.exports.signin = async (req, res) => {
@@ -40,7 +40,7 @@ module.exports.signin = async (req, res) => {
       expiresIn: config.jwtExpiration
     });
 
-    let refreshToken = await RefreshToken.createToken(user);
+    let session = await Session.createToken(user);
 
     delete user.dataValues.password;
 
@@ -62,21 +62,21 @@ module.exports.refreshToken = async (req, res) => {
     const userId = req.body.userId;
     if (!userId) return res.status(403).send({ message: req.t("error.model.auth.user.missing") });
 
-    let refreshToken = await RefreshToken.findOne({
+    let session = await Session.findOne({
       where: {
         userId: userId
       }
     });
 
-    if (!refreshToken) return res.status(403).send({ message: req.t("error.model.auth.refresh_token.invalid") });
+    if (!session) return res.status(403).send({ message: req.t("error.model.auth.refresh_token.invalid") });
 
-    if(RefreshToken.verifyExpiration(refreshToken)) {
-      RefreshToken.destroy({ where: { id: refreshToken.id } });
+    if(Session.verifyExpiration(session)) {
+      Session.destroy({ where: { id: session.id } });
 
       return res.status(403).send({ message: req.t("error.model.auth.refresh_token.expired") });
     }
 
-    const user = await refreshToken.getUser();
+    const user = await session.getUser();
     let newAccessToken = jwt.sign({
       id: user.id,
       role: user.role.id,
@@ -97,17 +97,17 @@ module.exports.logout = async (req, res) => {
     const userId = req.body.userId;
     if (!userId) return res.status(403).send({ message: req.t("error.model.auth.user.missing") });
 
-    let refreshToken = await RefreshToken.findOne({
+    let session = await Session.findOne({
       where: {
         userId: userId
       }
     });
 
-    if (!refreshToken) return res.status(403).send({ message: req.t("error.model.auth.refresh_token.invalid") });
+    if (!session) return res.status(403).send({ message: req.t("error.model.auth.refresh_token.invalid") });
 
-    RefreshToken.destroy({ where: { userId: refreshToken.userId } });
+    Session.destroy({ where: { userId: session.userId } });
 
-    res.clearCookie("refreshToken");
+    res.clearCookie("session");
     res.status(200).send({ message: req.t("messages.model.auth.logout") });
   }
   catch (error) {
