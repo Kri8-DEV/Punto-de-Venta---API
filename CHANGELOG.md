@@ -2,6 +2,7 @@
 
 ## 2023-04-06
 - RS [ADD] Se agregaron los modelos y schemas de Sales, SalesDetails y Customers, para poder realizar las operaciones de ventas
+- RS [FIX] Se agregó el campo 'token' del schema Session como primaryKey
 
 ## 2023-02-23
 - RS [FIX] The endpoints /api/auth/refreshtoken and /api/auth/logout now receive the user id in the body
