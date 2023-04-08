@@ -70,30 +70,37 @@ paths:
       description: Update a customer
       security:
         - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          description: Customer ID
+          required: true
+          schema:
+            type: UUID
       requestBody:
-        description: Customer to update
+        description: Customer to update (IDs are not required)
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                message:
-                  type: string
-                  example: Customer was updated successfully
-                  description: Customer was updated successfully
-                data:
-                  type: object
-                  properties:
-                    customer:
-                      $ref: "#/definitions/customer"
+              $ref: "#/definitions/customer"
       responses:
         "200":
           description: Customer updated
           content:
             application/json:
               schema:
-                $ref: "#/definitions/customer"
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Customer was updated successfully
+                    description: Customer was updated successfully
+                  data:
+                    type: object
+                    properties:
+                      customer:
+                        $ref: "#/definitions/customer"
         "400":
           description: Bad Request
           content:
@@ -120,7 +127,7 @@ paths:
       security:
         - Bearer: []
       requestBody:
-        description: Customer to create
+        description: Customer to create (IDs are not required)
         required: true
         content:
           application/json:
@@ -132,7 +139,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/definitions/customer"
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Customer was created successfully
+                    description: Customer was created successfully
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        $ref: '#/definitions/customer'
         "400":
           description: Bad Request
           content:

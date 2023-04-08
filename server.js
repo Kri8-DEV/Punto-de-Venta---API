@@ -87,6 +87,8 @@ const swaggerDocument = mergeYaml(['./swagger/swagger.yml'].concat(files.map(fil
   app.use([authToken, validateUserLevel]);
   require('./app/routes/user.routes')(app);
   require('./app/routes/product.routes')(app);
+  require('./app/routes/customer.routes')(app);
+  require('./app/routes/sale.routes')(app);
 
 // Start server
 app.listen(port, () => {
