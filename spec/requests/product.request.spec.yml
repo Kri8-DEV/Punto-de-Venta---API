@@ -207,7 +207,7 @@ paths:
             schema:
               $ref: '#/definitions/product'
       responses:
-        '200':
+        '201':
           description: OK
           content:
             application/json:
