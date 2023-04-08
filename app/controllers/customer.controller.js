@@ -83,52 +83,38 @@ module.exports.findOne = async (req, res) => {
 // Update a customer
 module.exports.update = async (req, res) => {
   try {
-    const customer = await sequelize.transaction(async (t) => {
+    const customer = await Customer.findOne({
+      where: {
+        id: req.params.id
+      }
+    });
 
-      if (req.body.address == null)
-        throw { message: req.t("error.model.customer.address_required"), status: 400 };
+    if (!customer) throw { message: req.t("error.model.customer.not_found"), status: 404 };
 
-      if (req.body.person == null)
-        throw { message: req.t("error.model.customer.person_required"), status: 400 };
+    const result = await sequelize.transaction(async (t) => {
+      const address = await customer.person.address.update({
+        street: req.body.address ? req.body.address.street : customer.person.address.street,
+        city: req.body.address ? req.body.address.city : customer.person.address.city,
+        state: req.body.address ? req.body.address.state : customer.person.address.state,
+        zip: req.body.address ? req.body.address.zip : customer.person.address.zip
+      }, { transaction: t });
 
-      const address = await Address.update({
-        street: req.body.address.street,
-        city: req.body.address.city,
-        state: req.body.address.state,
-        zip: req.body.address.zip
-      }, {
-        where: {
-          id: req.body.address.id
-        },
-        transaction: t
-      });
+      const person = await customer.person.update({
+        name: req.body.person ? req.body.person.name : customer.person.name,
+        number: req.body.person ? req.body.person.number : customer.person.number,
+      }, { transaction: t });
 
-      const person = await Person.update({
-        name: req.body.person.name,
-        number: req.body.person.number,
-      }, {
-        where: {
-          id: req.body.person.id
-        },
-        transaction: t
-      });
+      await person.setAddress(address, { transaction: t });
 
-      const customer = await Customer.update({
-        personId: person.id,
-      }, {
-        where: {
-          id: req.params.id
-        },
-        transaction: t
-      });
+      await customer.setPerson(person, { transaction: t });
 
       return Customer.findOne({
-        where: { id: req.params.id },
+        where: { id: customer.id },
          transaction: t
       });
     });
 
-    res.status(200).send({ message: req.t("messages.model.customer.updated"), data: { customer: customer } });
+    res.status(200).send({ message: req.t("messages.model.customer.updated"), data: { customer: result } });
   }
   catch (error) {
     error.status = error.status || 500;
