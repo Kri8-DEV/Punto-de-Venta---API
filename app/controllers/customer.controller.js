@@ -2,12 +2,13 @@ const db = require("../models");
 const sequelize = db.sequelize;
 
 const Customer = db.customer;
+const Address = db.address;
+const Person = db.person;
 
 // Create a new customer
 module.exports.create = async (req, res) => {
   try {
     const customer = await sequelize.transaction(async (t) => {
-
       if (req.body.address == null)
         throw { message: req.t("error.model.customer.address_required"), status: 400 };
 
