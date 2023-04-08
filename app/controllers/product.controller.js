@@ -57,7 +57,7 @@ module.exports.create = async (req, res) => {
       return response;
     });
 
-    res.status(200).send({ message: req.t("success.model.product.created"), data: { product: product } });
+    res.status(200).send({ message: req.t("message.model.product.created"), data: { product: product } });
   } catch(err) {
     err.status = err.status || 500;
     res.status(err.status).send({ message: err.message });

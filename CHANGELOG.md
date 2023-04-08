@@ -1,4 +1,4 @@
-# KRI Api v1.6.0
+# KRI Api v1.6.1
 
 ## 2023-04-07
 1. RS [FIX] Se cambio la forma en la que se recibe el access token, ahora se manda directamente al header del response, tanto el en endpoint del login como del refresh token
