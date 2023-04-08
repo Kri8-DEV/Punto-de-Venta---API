@@ -33,9 +33,13 @@ db.role = require('../db/role.schema')(sequelize, Sequelize);
 db.address = require('../db/address.schema')(sequelize, Sequelize);
 db.person = require('../db/person.schema')(sequelize, Sequelize);
 db.product = require('../db/product.schema')(sequelize, Sequelize);
-db.refreshToken = require('../db/refreshToken.schema')(sequelize, Sequelize);
+db.refreshToken = require('../db/refresh_token.schema')(sequelize, Sequelize);
+db.expiredAccessToken = require('../db/expired_access_token.schema')(sequelize, Sequelize);
 db.store = require('../db/store.schema')(sequelize, Sequelize);
 db.stock = require('../db/stock.schema')(sequelize, Sequelize);
+db.customer = require('../db/customer.schema')(sequelize, Sequelize);
+db.sale = require('../db/sale.schema')(sequelize, Sequelize);
+db.saleDetail = require('../db/sale_detail.schema')(sequelize, Sequelize);
 
 // Models
 require('./user.model.js')(db);
@@ -43,8 +47,12 @@ require('./role.model.js')(db);
 require('./address.model.js')(db);
 require('./person.model.js')(db);
 require('./product.model.js')(db);
-require('./refreshToken.model.js')(db);
+require('./refresh_token.model.js')(db);
+require('./expired_access_token.model.js')(db);
 require('./store.model.js')(db);
 require('./stock.model.js')(db);
+require('./customer.model.js')(db);
+require('./sale.model.js')(db);
+require('./sale_detail.model.js')(db);
 
 module.exports = db;

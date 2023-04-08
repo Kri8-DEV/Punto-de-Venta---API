@@ -59,7 +59,6 @@ const swaggerDocument = mergeYaml(['./swagger/swagger.yml'].concat(files.map(fil
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(cookieParser());
 
-  app.use('/api/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   app.use(function(req, res, next) {
     res.header(
       "Access-Control-Allow-Headers",
@@ -70,8 +69,18 @@ const swaggerDocument = mergeYaml(['./swagger/swagger.yml'].concat(files.map(fil
 
 // Routes
   require('./app/routes/auth.routes')(app);
+  // Development routes
+  if (process.env.NODE_ENV === 'development') {
+    app.use('/api/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+  }
+
   app.get('/', (req, res) => {
-    res.json({ message: res.locals.t('welcome') });
+    if (process.env.NODE_ENV === 'development') {
+      res.redirect('/api/swagger');
+    }
+    else{
+      res.json({ message: res.locals.t('welcome') });
+    }
   });
 
   // Middleware for all routes below

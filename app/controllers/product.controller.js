@@ -31,7 +31,7 @@ module.exports.findOne = async (req, res) => {
       }
     });
 
-    if (!product) throw { message: "Product not found", status: 404 };
+    if (!product) throw { message: req.t("error.model.product.not_found"), status: 404 };
 
     res.status(200).send(product);
   } catch (error) {
@@ -57,7 +57,7 @@ module.exports.create = async (req, res) => {
       return response;
     });
 
-    res.status(200).send({ message: "Product created successfully", data: { product: product } });
+    res.status(200).send({ message: req.t("success.model.product.created"), data: { product: product } });
   } catch(err) {
     err.status = err.status || 500;
     res.status(err.status).send({ message: err.message });
@@ -72,7 +72,7 @@ module.exports.update = async (req, res) => {
         where: { sku: req.params.sku }
       }, { transaction: t });
 
-      if (!up_product) throw { message: "Product not found", status: 404 };
+      if (!up_product) throw { message: req.t("error.model.product.not_found"), status: 404 };
 
       await up_product.update({
         name: req.body.name,
@@ -92,9 +92,9 @@ module.exports.update = async (req, res) => {
       return response;
     });
 
-    if (!product) throw { message: "Product not found", status: 404 };
+    if (!product) throw { message: req.t("error.model.product.not_found"), status: 404 };
 
-    res.status(200).send({ message: "Product updated successfully", data: { product: product } });
+    res.status(200).send({ message: req.t("messages.model.product.updated"), data: { product: product } });
   } catch(err) {
     err.status = err.status || 500;
     res.status(err.status).send({ message: err.message });
@@ -110,7 +110,7 @@ module.exports.deactivate = async (req, res) => {
         where: { sku: req.params.sku }
       }, { transaction: t });
 
-      if (!up_product) throw { message: "Product not found", status: 404 };
+      if (!up_product) throw { message: req.t("error.model.product.not_found"), status: 404 };
 
       await up_product.update({
         active: false
@@ -121,7 +121,7 @@ module.exports.deactivate = async (req, res) => {
       return up_product;
     });
 
-    res.status(200).send({ message: "Product deactivated successfully" });
+    res.status(200).send({ message: req.t("messages.model.product.deactivated") });
   } catch(err) {
     err.status = err.status || 500;
     res.status(err.status).send({ message: err.message });

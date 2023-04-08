@@ -1,7 +1,7 @@
-openapi: '3.0.0'
+openapi: "3.0.0"
 info:
   title: KRI Eight - API
-  version: '1.5.2'
+  version: "1.5.2"
   description: KRI Eight - API
 components:
   securitySchemes:
@@ -53,6 +53,19 @@ definitions:
         type: string
         example: 123456
         description: User password
+  customer:
+    type: object
+    properties:
+      id:
+        type: UUID
+        example: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+        description: Internal customer ID
+      person:
+        $ref: "#/definitions/person"
+  customers:
+    type: array
+    items:
+      $ref: "#/definitions/customer"
   error:
     type: object
     properties:
@@ -70,12 +83,8 @@ definitions:
       data:
         type: object
         properties:
-          token:
-            type: string
-            example: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
-            description: JWT token
           user:
-            $ref: '#/definitions/user'
+            $ref: "#/definitions/user"
   signUp:
     type: object
     properties:
@@ -87,7 +96,7 @@ definitions:
         type: object
         properties:
           user:
-            $ref: '#/definitions/user'
+            $ref: "#/definitions/user"
   updatedAt:
     type: string
     example: 2023-01-28T03:37:33.114Z
@@ -108,7 +117,7 @@ definitions:
         example: 7441234567
         description: Person cellphone number
       address:
-        $ref: '#/definitions/address'
+        $ref: "#/definitions/address"
   role:
     type: object
     properties:
@@ -140,13 +149,13 @@ definitions:
         example: true
         description: User active status
       role:
-        $ref: '#/definitions/role'
+        $ref: "#/definitions/role"
       person:
-        $ref: '#/definitions/person'
+        $ref: "#/definitions/person"
   users:
     type: array
     items:
-      $ref: '#/definitions/user'
+      $ref: "#/definitions/user"
   product:
     type: object
     properties:
@@ -184,3 +193,63 @@ definitions:
         type: boolean
         example: true
         description: Product active status
+  sale_details:
+    type: array
+    properties:
+      product:
+        $ref: "#/definitions/product"
+      quantity:
+        type: integer
+        example: 1
+        description: Product quantity
+      price:
+        type: number
+        format: currency
+        example: 100
+        description: Product price
+  store:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+        description: Internal store ID
+      name:
+        type: string
+        example: Store 1
+        description: Store name
+      address:
+        $ref: "#/definitions/address"
+      user:
+        $ref: "#/definitions/user"
+  sale:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+        description: Internal sale ID
+      store:
+        $ref: "#/definitions/store"
+      customer:
+        $ref: "#/definitions/customer"
+      date:
+        type: string
+        example: 2023-01-28T03:37:33.114Z
+        description: Sale date
+      total:
+        type: number
+        format: currency
+        example: 100
+        description: Sale total
+      details:
+        $ref: "#/definitions/sale_details"
+  sales:
+    type: array
+    items:
+      $ref: "#/definitions/sale"
+  token:
+    type: string
+    example: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+    description: JWT token
+

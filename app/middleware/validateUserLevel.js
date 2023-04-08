@@ -9,9 +9,9 @@ module.exports.validateUserLevel = (req, res, next) => {
   if (req.body.role)
     roleId = ROLE[req.body.role.toUpperCase()];
 
-  if (roleId == null) return res.status(400).send({ message: "Role no found" });
+  if (roleId == null) return res.status(400).send({ message: req.t("error.model.auth.user_level.role_invalid") });
 
-  if (req.userRole <= roleId) return res.status(403).send({ message: "Forbidden: You need a higher role" });
+  if (req.userRole <= roleId) return res.status(403).send({ message: req.t("error.model.auth.user_level.role_insufficient") });
 
   req.roleId = roleId;
   next();

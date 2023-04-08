@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "SET NODE_ENV=test&& mocha --exit --recursive --timeout 10000",
-    "dev": "nodemon server.js",
+    "dev": "SET NODE_ENV=development&& nodemon server.js",
     "sync_db": "SET NODE_ENV=development&& SET DB_SYNC=true&& npm run start",
     "start": "node server.js"
   },

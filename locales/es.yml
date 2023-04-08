@@ -1,23 +1,70 @@
 welcome: "Bienvenido a la API de KRI Eight"
 error:
   model:
+    customer:
+      created: "Error al crear el cliente"
+      updated: "Error al actualizar el cliente"
+      deleted: "Error al eliminar el cliente"
+      not_found: "Cliente no encontrado"
+      person_required: "La persona es requerida"
+      address_required: "La dirección es requerida"
     user:
       not_found: "Usuario no encontrado"
       invalid_password: "Contraseña inválida"
+      password_required: "La contraseña es requerida"
+      address_required: "La dirección es requerida"
+      person_required: "La persona es requerida"
+      cannot_update: "No estas autorizado para actualizar este usuario"
     auth:
       refresh_token:
         invalid: "Token de refresco inválido"
         expired: "Token de refresco expirado. Inicie sesión nuevamente."
         missing: "Falta token de refresco"
+        invalid_session: "Sesión inválida. Inicie sesión nuevamente."
       user:
         missing: "Falta usuario"
       login:
-        already_logged_in: "El usuario ya ha iniciado sesión"
+        already_logged_in: "El usuario ya cuenta con una sesión iniciada"
+      jwt:
+        expired: "Sin autorización. Token expirado"
+        invalid: "Sin autorización. Token inválido"
+        missing: "Sin autorización. Token no encontrado"
+      user_level:
+        role_invalid: "Rol inválido o no encontrado"
+        role_insufficient: "Prohibido. No tienes el nivel de acceso requerido"
+    product:
+      created: "Error al crear el producto"
+      updated: "Error al actualizar el producto"
+      deleted: "Error al eliminar el producto"
+      not_found: "Producto no encontrado"
+    sale:
+      created: "Error al crear la venta"
+      updated: "Error al actualizar la venta"
+      deleted: "Error al eliminar la venta"
+      not_found: "Venta no encontrada"
 messages:
   model:
+    customer:
+      created: "Cliente creado correctamente"
+      updated: "Cliente actualizado correctamente"
+      found: "Cliente encontrado correctamente"
     user:
       login: "El usuario ha iniciado sesión correctamente"
+      created: "Usuario creado correctamente"
+      updated: "Usuario actualizado correctamente"
+      deleted: "Usuario eliminado correctamente"
+      deactivated: "Usuario desactivado correctamente"
+      reactivated: "Usuario reactivado correctamente"
     auth:
       refresh_token:
         refreshed: "Token de refresco actualizado correctamente"
       logout: "El usuario ha cerrado sesión correctamente"
+    product:
+      created: "Producto creado correctamente"
+      updated: "Producto actualizado correctamente"
+      deleted: "Producto eliminado correctamente"
+      deactivated: "Producto desactivado correctamente"
+    sale:
+      created: "Venta creada correctamente"
+      updated: "Venta actualizada correctamente"
+      deleted: "Venta eliminada correctamente"
