@@ -1,0 +1,153 @@
+paths:
+  /api/customers:
+    get:
+      tags:
+        - Customer
+      description: Get all customers
+      security:
+        - Bearer: []
+      responses:
+        "200":
+          description: Customers retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/customers"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/error"
+  /api/customer/:id:
+    get:
+      tags:
+        - Customer
+      description: Get a specific customer
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          description: Customer ID
+          required: true
+          schema:
+            type: UUID
+      responses:
+        "200":
+          description: Customer retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/customer"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/error"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/error"
+    put:
+      tags:
+        - Customer
+      description: Update a customer
+      security:
+        - Bearer: []
+      requestBody:
+        description: Customer to update
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Customer was updated successfully
+                  description: Customer was updated successfully
+                data:
+                  type: object
+                  properties:
+                    customer:
+                      $ref: "#/definitions/customer"
+      responses:
+        "200":
+          description: Customer updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/customer"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/error"
+  /api/customer:
+    post:
+      tags:
+        - Customer
+      description: Create a customer
+      security:
+        - Bearer: []
+      requestBody:
+        description: Customer to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/definitions/customer"
+      responses:
+        "201":
+          description: Customer created
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/customer"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/error"

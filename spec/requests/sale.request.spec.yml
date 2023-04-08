@@ -1,28 +1,18 @@
 paths:
-  /api/auth/signin:
-    post:
+  /api/sales:
+    get:
       tags:
-        - Authentication
-      description: Sign in to the application and get a JWT token
-      parameters:
-        - name: credentials
-          in: body
-          description: User credentials
-          required: true
-          schema:
-            $ref: '#/definitions/credentials'
+        - Sale
+      description: Get all sales
+      security:
+        - Bearer: []
       responses:
         '200':
-          description: User logged in
-          headers:
-            Authorization:
-              schema:
-                $ref: '#/definitions/token'
-              description: JWT token
+          description: Sales retrieved
           content:
             application/json:
               schema:
-                $ref: '#/definitions/signIn'
+                $ref: '#/definitions/sales'
         '401':
           description: Unauthorized
           content:
@@ -35,35 +25,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/definitions/error'
-  /api/auth/refreshtoken:
-    post:
+  /api/sale/:id:
+    get:
       tags:
-        - Authentication
-      description: Refresh JWT token
+        - Sale
+      description: Get a specific sale by ID
+      security:
+        - Bearer: []
       parameters:
-        - in: header
-          name: Authorization
-          schema:
-            $ref: '#/definitions/token'
+        - name: id
+          in: path
+          description: Sale ID
           required: true
-          description: Bearer JWT token
+          schema:
+            type: integer
       responses:
         '200':
-          description: Token refreshed
-          headers:
-            Authorization:
-              schema:
-                $ref: '#/definitions/token'
-              description: JWT token
+          description: Sale retrieved
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "The token was refreshed"
-                    description: User was logged in successfully
+                $ref: '#/definitions/sale'
         '401':
           description: Unauthorized
           content:
@@ -72,6 +54,12 @@ paths:
                 $ref: '#/definitions/error'
         '403':
           description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '404':
+          description: Not Found
           content:
             application/json:
               schema:
@@ -82,29 +70,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/definitions/error'
-  /api/auth/logout:
+  /api/sale/new:
     post:
       tags:
-        - Authentication
-      description: Logout to the application
-      parameters:
-        - in: header
-          name: Authorization
-          schema:
-            $ref: '#/definitions/token'
-          required: true
-          description: Bearer JWT token
+        - Sale
+      description: Create a new sale
+      security:
+        - Bearer: []
+      requestBody:
+        description: Sale object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/sale'
       responses:
-        '200':
-          description: User logged out
+        '201':
+          description: Sale created
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: User logged out
+                $ref: '#/definitions/sale'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
         '401':
           description: Unauthorized
           content:
@@ -113,6 +105,12 @@ paths:
                 $ref: '#/definitions/error'
         '403':
           description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/error'
+        '404':
+          description: Not Found
           content:
             application/json:
               schema:
