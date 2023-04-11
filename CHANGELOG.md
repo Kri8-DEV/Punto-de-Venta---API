@@ -1,5 +1,8 @@
 # KRI Api v1.6.1
 
+## 2023-04-11
+1. RS [ADD] Se agregó 'json-api-serializer' para poder serializar los datos de las tablas de la base de datos
+
 ## 2023-04-07
 1. RS [FIX] Se cambio la forma en la que se recibe el access token, ahora se manda directamente al header del response, tanto el en endpoint del login como del refresh token
 2. RS [FIX] Ahora los endpoints de refreshToken como logout reciben el access token en el header del request. Ya no recibe el id del usuario en el body del request.
