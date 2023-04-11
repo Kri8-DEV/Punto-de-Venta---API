@@ -8,8 +8,6 @@ const bodyParser = require('body-parser');
 
 const db = require("./app/models");
 const db_seed = require("./app/config/db.seed.js");
-const { authToken } = require("./app/middleware/authJwt.js");
-const { validateUserLevel } = require("./app/middleware/validateUserLevel.js");
 
 // Config
 const app = express();
@@ -42,17 +40,6 @@ if (process.env.NODE_ENV === 'development' && process.env.DB_SYNC === 'true') {
   });
 }
 
-// Swagger
-const swaggerUi = require('swagger-ui-express');
-var mergeYaml = require('merge-yaml');
-
-const fs = require('fs');
-let files = []
-if (fs.existsSync('./spec/requests')) {
-  files = fs.readdirSync('./spec/requests')
-}
-const swaggerDocument = mergeYaml(['./swagger/swagger.yml'].concat(files.map(file => './spec/requests/' + file)))
-
 // Middleware for all routes
   app.use(i18n.middleware);
   app.use(bodyParser.json());
@@ -68,27 +55,7 @@ const swaggerDocument = mergeYaml(['./swagger/swagger.yml'].concat(files.map(fil
   });
 
 // Routes
-  require('./app/routes/auth.routes')(app);
-  // Development routes
-  if (process.env.NODE_ENV === 'development') {
-    app.use('/api/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-  }
-
-  app.get('/', (req, res) => {
-    if (process.env.NODE_ENV === 'development') {
-      res.redirect('/api/swagger');
-    }
-    else{
-      res.json({ message: res.locals.t('welcome') });
-    }
-  });
-
-  // Middleware for all routes below
-  app.use([authToken, validateUserLevel]);
-  require('./app/routes/user.routes')(app);
-  require('./app/routes/product.routes')(app);
-  require('./app/routes/customer.routes')(app);
-  require('./app/routes/sale.routes')(app);
+require('./app/config/routes.config')(app)
 
 // Start server
 app.listen(port, () => {
