@@ -12,5 +12,8 @@ module.exports = (db) => {
   // Scopes
   db.person.addScope('defaultScope', {
     attributes: { exclude: ['addressId', 'createdAt', 'updatedAt'] },
+    include: [
+      { model: db.address, as: 'address' }
+    ]
   }, { override: true });
 }

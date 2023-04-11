@@ -23,17 +23,12 @@ module.exports = (db) => {
     where: {
       active: true
     },
-    attributes: {
-      exclude: ["password", "personId", "roleId", "createdAt", "updatedAt"]
-    },
     include: [
       { model: db.role, as: 'role' },
-      { model: db.person, as: 'person', include: [
-        { model: db.address, as: 'address' }
-      ] }
+      { model: db.person, as: 'person' }
     ]
   }, { override: true });
-  
+
   db.user.addScope('withPassword', {
     attributes: {
       include: ["password"]
