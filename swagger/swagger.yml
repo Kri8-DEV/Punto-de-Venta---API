@@ -149,10 +149,6 @@ definitions:
         $ref: "#/definitions/role"
       person:
         $ref: "#/definitions/person"
-  users:
-    type: array
-    items:
-      $ref: "#/definitions/user"
   product:
     type: object
     properties:
@@ -241,10 +237,6 @@ definitions:
         description: Sale total
       details:
         $ref: "#/definitions/sale_details"
-  sales:
-    type: array
-    items:
-      $ref: "#/definitions/sale"
   serialized_user:
     type: object
     properties:
@@ -277,6 +269,51 @@ definitions:
             description: User role
           person:
             $ref: "#/definitions/person"
+  serialized_product:
+    type: object
+    properties:
+      type:
+        type: string
+        example: Product
+        description: Data type
+      id:
+        type: string
+        example: 123456
+        description: Product SKU
+      attributes:
+        type: object
+        properties:
+          name:
+            type: string
+            example: Product 1
+            description: Product name
+          description:
+            type: string
+            example: Product 1 description
+            description: Product description
+          price:
+            type: number
+            format: currency
+            example: 100
+            description: Product price
+          kg_price:
+            type: number
+            format: currency
+            example: 100
+            description: Product price per kg
+          image:
+            type: string
+            format: binary
+            description: Product image
+          weight:
+            type: number
+            example: 100
+            description: Product weight
+          active:
+            type: boolean
+            example: true
+            description: Product active status
+
   token:
     type: string
     example: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX

@@ -8,5 +8,6 @@ var Serializer = new JSONAPISerializer({
 });
 
 require('./user.serializer')(Serializer);
+require('./product.serializer')(Serializer);
 
 module.exports.Serializer = Serializer;

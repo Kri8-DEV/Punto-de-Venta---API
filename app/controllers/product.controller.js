@@ -1,6 +1,8 @@
 const db = require("../models");
 const sequelize = db.sequelize;
 
+const Serializer = require("../serializers/serializer").Serializer;
+
 const Op = db.Sequelize.Op;
 const Product = db.product;
 
@@ -15,7 +17,9 @@ module.exports.findAll = async (req, res) => {
       },
     });
 
-    res.status(200).send(products);
+    const data = Serializer.serialize('product', products.map(product => product.toJSON())).data;
+
+    res.status(200).send(data);
   } catch (error) {
     error.status = error.status || 500;
     res.status(error.status).send({ message: error.message });
@@ -33,7 +37,9 @@ module.exports.findOne = async (req, res) => {
 
     if (!product) throw { message: req.t("error.model.product.not_found"), status: 404 };
 
-    res.status(200).send(product);
+    const data = Serializer.serialize('product', product.toJSON()).data;
+
+    res.status(200).send(data);
   } catch (error) {
     error.status = error.status || 500;
     res.status(error.status).send({ message: error.message });
@@ -57,7 +63,9 @@ module.exports.create = async (req, res) => {
       return response;
     });
 
-    res.status(200).send({ message: req.t("message.model.product.created"), data: { product: product } });
+    const data = Serializer.serialize('product', product.toJSON()).data;
+
+    res.status(200).send({ message: req.t("message.model.product.created"), data: data });
   } catch(err) {
     err.status = err.status || 500;
     res.status(err.status).send({ message: err.message });
@@ -94,7 +102,9 @@ module.exports.update = async (req, res) => {
 
     if (!product) throw { message: req.t("error.model.product.not_found"), status: 404 };
 
-    res.status(200).send({ message: req.t("messages.model.product.updated"), data: { product: product } });
+    const data = Serializer.serialize('product', product.toJSON()).data;
+
+    res.status(200).send({ message: req.t("messages.model.product.updated"), data: data });
   } catch(err) {
     err.status = err.status || 500;
     res.status(err.status).send({ message: err.message });

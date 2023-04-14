@@ -19,7 +19,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/definitions/users'
+                type: array
+                items:
+                  $ref: '#/definitions/serialized_user'
         '401':
           description: Unauthorized
           content:
