@@ -313,7 +313,22 @@ definitions:
             type: boolean
             example: true
             description: Product active status
-
+  serialized_customer:
+    type: object
+    properties:
+      type:
+        type: string
+        example: Customer
+        description: Data type
+      id:
+        type: uuid
+        example: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+        description: Internal customer ID
+      attributes:
+        type: object
+        properties:
+          person:
+            $ref: "#/definitions/person"
   token:
     type: string
     example: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX

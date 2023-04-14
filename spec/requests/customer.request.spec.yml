@@ -12,7 +12,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/definitions/customers"
+                type: array
+                items:
+                  $ref: "#/definitions/serialized_customer"
         "401":
           description: Unauthorized
           content:
@@ -45,7 +47,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/definitions/customer"
+                $ref: "#/definitions/serialized_customer"
         "401":
           description: Unauthorized
           content:
@@ -83,7 +85,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/definitions/customer"
+              $ref: "#/definitions/serialized_customer"
       responses:
         "200":
           description: Customer updated
@@ -132,7 +134,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/definitions/customer"
+              $ref: "#/definitions/serialized_customer"
       responses:
         "201":
           description: Customer created
