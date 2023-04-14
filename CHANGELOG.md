@@ -1,5 +1,10 @@
 # KRI Api v1.6.1
 
+## 2023-04-14
+1. RS [ADD] Se agregó el serializer para customer
+2. RS [ADD] Se agregó el serializer para product
+3. RS [ADD] Se agregó el serializer para user
+
 ## 2023-04-11
 1. RS [ADD] Se agregó 'json-api-serializer' para poder serializar los datos de las tablas de la base de datos
 
