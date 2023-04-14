@@ -19,7 +19,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/definitions/users'
+                type: array
+                items:
+                  $ref: '#/definitions/serialized_user'
         '401':
           description: Unauthorized
           content:
@@ -40,7 +42,7 @@ paths:
       security:
       - Bearer: []
       parameters:
-        - name: credentials
+        - name: User information
           in: body
           description: User information (ID is not required)
           required: true
@@ -52,7 +54,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/definitions/signUp'
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User registered successfully
+                    description: User registered successfully
+                  data:
+                    $ref: '#/definitions/serialized_user'
         '400':
           description: Bad Request
           content:
@@ -69,7 +78,7 @@ paths:
     get:
       tags:
         - User
-      description: Get a specific user
+      description: Get a specific user by ID
       security:
         - Bearer: []
       parameters:
@@ -85,7 +94,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/definitions/user'
+                $ref: '#/definitions/serialized_user'
         '401':
           description: Unauthorized
           content:
@@ -139,7 +148,7 @@ paths:
                     type: object
                     properties:
                       user:
-                        $ref: '#/definitions/user'
+                        $ref: '#/definitions/serialized_user'
         '401':
           description: Unauthorized
           content:
@@ -275,7 +284,7 @@ paths:
                     type: object
                     properties:
                       user:
-                        $ref: '#/definitions/user'
+                        $ref: '#/definitions/serialized_user'
         '401':
           description: Unauthorized
           content:

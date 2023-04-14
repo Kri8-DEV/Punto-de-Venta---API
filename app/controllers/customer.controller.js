@@ -1,6 +1,8 @@
 const db = require("../models");
 const sequelize = db.sequelize;
 
+const Serializer = require("../serializers/serializer").Serializer;
+
 const Customer = db.customer;
 const Address = db.address;
 const Person = db.person;
@@ -39,7 +41,9 @@ module.exports.create = async (req, res) => {
       });
     });
 
-    res.status(200).send({ message: req.t("messages.model.customer.created"), data: { customer: customer } });
+    const data = Serializer.serialize("customer", customer.toJSON()).data;
+
+    res.status(200).send({ message: req.t("messages.model.customer.created"), data: data });
   }
   catch (error) {
     error.status = error.status || 500;
@@ -52,7 +56,9 @@ module.exports.findAll = async (req, res) => {
   try {
     const customers = await Customer.findAll();
 
-    res.status(200).send(customers);
+    const data = Serializer.serialize("customer", customers.map(customer => customer.toJSON())).data;
+
+    res.status(200).send(data);
   }
   catch (error) {
     error.status = error.status || 500;
@@ -72,7 +78,9 @@ module.exports.findOne = async (req, res) => {
     if (!customer)
       throw { message: req.t("error.model.customer.not_found"), status: 404 };
 
-    res.status(200).send(customer);
+    const data = Serializer.serialize("customer", customer.toJSON()).data;
+
+    res.status(200).send(data);
   }
   catch (error) {
     error.status = error.status || 500;
@@ -114,7 +122,9 @@ module.exports.update = async (req, res) => {
       });
     });
 
-    res.status(200).send({ message: req.t("messages.model.customer.updated"), data: { customer: result } });
+    const data = Serializer.serialize("customer", result.toJSON());
+
+    res.status(200).send({ message: req.t("messages.model.customer.updated"), data: data });
   }
   catch (error) {
     error.status = error.status || 500;

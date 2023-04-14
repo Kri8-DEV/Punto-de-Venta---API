@@ -2,6 +2,8 @@ const db = require("../models");
 const sequelize = db.sequelize;
 const config = require("../config/auth.config");
 
+const Serializer = require('../serializers/serializer').Serializer;
+
 const Op = db.Sequelize.Op;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -15,7 +17,7 @@ module.exports.signin = async (req, res) => {
   try{
     const user = await sequelize.transaction(async (t) => {
 
-      const response = await User.scope(["defaultScope","withPassword"]).findOne({
+      const response = await User.findOne({
         where: {
           [Op.or]: [{username: req.body.username || ""}, {email: req.body.email || ""}]
         },
@@ -44,10 +46,9 @@ module.exports.signin = async (req, res) => {
       expiresIn: config.jwtExpiration
     });
 
-    delete user.dataValues.password;
-
+    const data = Serializer.serialize('user', user.dataValues).data;
     res.setHeader("Authorization", token);
-    return res.status(200).send({ message: req.t("messages.model.user.login"), data: { user: user } });
+    return res.status(200).send({ message: req.t("messages.model.user.login"), data: data });
 
   } catch (error) {
     error.status = error.status || 500;

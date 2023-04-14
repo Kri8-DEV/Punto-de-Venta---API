@@ -81,10 +81,7 @@ definitions:
         example: User was logged in successfully
         description: User was logged in successfully
       data:
-        type: object
-        properties:
-          user:
-            $ref: "#/definitions/user"
+        $ref: "#/definitions/user"
   signUp:
     type: object
     properties:
@@ -152,10 +149,6 @@ definitions:
         $ref: "#/definitions/role"
       person:
         $ref: "#/definitions/person"
-  users:
-    type: array
-    items:
-      $ref: "#/definitions/user"
   product:
     type: object
     properties:
@@ -244,12 +237,99 @@ definitions:
         description: Sale total
       details:
         $ref: "#/definitions/sale_details"
-  sales:
-    type: array
-    items:
-      $ref: "#/definitions/sale"
+  serialized_user:
+    type: object
+    properties:
+      type:
+        type: string
+        example: user
+        description: Data type
+      id:
+        type: uuid
+        example: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+        description: Internal user ID
+      attributes:
+        type: object
+        properties:
+          username:
+            type: string
+            example: Admin KRI
+            description: User name
+          email:
+            type: string
+            example: admin@krieight.com
+            description: User email
+          active:
+            type: boolean
+            example: true
+            description: User active status
+          role:
+            type: string,
+            example: Admin
+            description: User role
+          person:
+            $ref: "#/definitions/person"
+  serialized_product:
+    type: object
+    properties:
+      type:
+        type: string
+        example: Product
+        description: Data type
+      id:
+        type: string
+        example: 123456
+        description: Product SKU
+      attributes:
+        type: object
+        properties:
+          name:
+            type: string
+            example: Product 1
+            description: Product name
+          description:
+            type: string
+            example: Product 1 description
+            description: Product description
+          price:
+            type: number
+            format: currency
+            example: 100
+            description: Product price
+          kg_price:
+            type: number
+            format: currency
+            example: 100
+            description: Product price per kg
+          image:
+            type: string
+            format: binary
+            description: Product image
+          weight:
+            type: number
+            example: 100
+            description: Product weight
+          active:
+            type: boolean
+            example: true
+            description: Product active status
+  serialized_customer:
+    type: object
+    properties:
+      type:
+        type: string
+        example: Customer
+        description: Data type
+      id:
+        type: uuid
+        example: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+        description: Internal customer ID
+      attributes:
+        type: object
+        properties:
+          person:
+            $ref: "#/definitions/person"
   token:
     type: string
     example: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
     description: JWT token
-

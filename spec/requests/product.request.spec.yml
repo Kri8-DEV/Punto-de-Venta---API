@@ -21,7 +21,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/definitions/product'
+                  $ref: '#/definitions/serialized_product'
         '401':
           description: Unauthorized
           content:
@@ -66,7 +66,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/definitions/product'
+                $ref: '#/definitions/serialized_product'
         '401':
           description: Unauthorized
           content:
@@ -108,7 +108,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/definitions/product'
+              $ref: '#/definitions/serialized_product'
       responses:
         '200':
           description: OK
@@ -205,7 +205,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/definitions/product'
+              $ref: '#/definitions/serialized_product'
       responses:
         '201':
           description: OK
