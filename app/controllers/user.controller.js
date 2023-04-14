@@ -5,6 +5,8 @@ const ROLE = require("../config/roleList");
 const Op = db.Sequelize.Op;
 var bcrypt = require("bcryptjs");
 
+const Serializer = require('../serializers/serializer').Serializer;
+
 const User = db.user;
 const Person = db.person;
 const Address = db.address;
@@ -21,7 +23,8 @@ module.exports.findAll = async (req, res) => {
       },
     });
 
-    res.status(200).send(users);
+    const data = Serializer.serialize('user', users.map(user => user.toJSON())).data;
+    res.status(200).send(data);
   } catch (error) {
     error.status = error.status || 500;
     res.status(error.status).send({ message: error.message });
@@ -40,7 +43,8 @@ module.exports.findOne = async (req, res) => {
     if (!user)
       throw { message: req.t("error.model.user.not_found"), status: 404 };
 
-    res.status(200).send(user);
+    const data = Serializer.serialize('user', user.toJSON()).data;
+    res.status(200).send(data);
   } catch (error) {
     error.status = error.status || 500;
     res.status(error.status).send({ message: error.message });
@@ -100,7 +104,9 @@ module.exports.create = async (req, res) => {
       });
     });
 
-    res.send({ message: req.t("messages.model.user.created"), data: { user: result } });
+    const data = Serializer.serialize('user', result.toJSON()).data;
+
+    res.send({ message: req.t("messages.model.user.created"), data: data});
   } catch (error) {
     error.status = error.status || 500;
     res.status(error.status).send({ message: error.message });
@@ -206,7 +212,9 @@ module.exports.update = async (req, res) => {
       });
     });
 
-    res.send({ message: req.t("messages.model.user.updated"), data: { user: result } });
+    const data = Serializer.serialize('user', result.toJSON()).data;
+
+    res.send({ message: req.t("messages.model.user.updated"), data: data });
   } catch (error) {
     error.status = error.status || 500;
     res.status(error.status).send({ message: error.message });

@@ -1,4 +1,12 @@
-# KRI Api v1.6.1
+# KRI Api v1.7.0
+
+## 2023-04-14
+1. RS [ADD] Se agregó el serializer para customer
+2. RS [ADD] Se agregó el serializer para product
+3. RS [ADD] Se agregó el serializer para user
+
+## 2023-04-11
+1. RS [ADD] Se agregó 'json-api-serializer' para poder serializar los datos de las tablas de la base de datos
 
 ## 2023-04-07
 1. RS [FIX] Se cambio la forma en la que se recibe el access token, ahora se manda directamente al header del response, tanto el en endpoint del login como del refresh token

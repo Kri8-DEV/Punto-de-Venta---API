@@ -1,6 +1,6 @@
 # KRI Api
 Generic API made with NodeJS, Express and MySQL
-Version: 1.6.1
+Version: 1.7.0
 Autor: KRI Eight Team
 
 ## Installation
@@ -18,8 +18,9 @@ Install all the next dependencies for the project:
 - uuid
 - cookie-parser
 - i18n-node-yaml
+- json-api-serializer
 
-```npm i nodemon express mysql2 cors morgan dotenv body-parser bcryptjs jsonwebtoken sequelize uuid cookie-parser i18n-node-yaml --save```
+```npm i json-api-serializer nodemon express mysql2 cors morgan dotenv body-parser bcryptjs jsonwebtoken sequelize uuid cookie-parser i18n-node-yaml --save```
 
 Install Swagger dependencies:
 - swagger-jsdoc

@@ -1,6 +1,6 @@
 {
   "name": "kri-api",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "description": "Generic API made with NodeJS, Express and MySQL to manage a store",
   "main": "server.js",
   "scripts": {
@@ -27,11 +27,12 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "i18n-node-yaml": "^1.0.4",
+    "json-api-serializer": "^2.6.6",
     "jsonwebtoken": "^9.0.0",
     "morgan": "^1.10.0",
-    "mysql2": "^3.1.2",
-    "nodemon": "^2.0.20",
-    "sequelize": "^6.28.2",
+    "mysql2": "^3.2.0",
+    "nodemon": "^2.0.22",
+    "sequelize": "^6.31.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
