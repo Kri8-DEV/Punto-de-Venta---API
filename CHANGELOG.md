@@ -1,4 +1,4 @@
-# KRI Api v1.6.1
+# KRI Api v1.7.0
 
 ## 2023-04-14
 1. RS [ADD] Se agregó el serializer para customer
